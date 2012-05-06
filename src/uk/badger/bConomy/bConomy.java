@@ -2,6 +2,7 @@ package uk.badger.bConomy;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import uk.badger.bConomy.config.Config;
 import uk.badger.bConomy.config.DatabaseManager;
 
 public class bConomy extends JavaPlugin {
@@ -14,7 +15,7 @@ public class bConomy extends JavaPlugin {
 		Global.setPlugin(this);
 
 		m_dbmanager = new DatabaseManager(this);
-		
+		Config.setupConfig();
 	}
 	
 }

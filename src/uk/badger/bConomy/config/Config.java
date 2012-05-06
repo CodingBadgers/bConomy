@@ -16,7 +16,7 @@ public class Config {
 	
 	public static DatabaseInfo m_dbInfo = null;
 	
-	public boolean setupConfig() {
+	public static boolean setupConfig() {
 		
 		FileConfiguration config = Global.getPlugin().getConfig();
 		
