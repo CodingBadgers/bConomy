@@ -22,6 +22,10 @@ public class Global {
 		System.out.println("[bConomy] " + message);
 		
 	}
+	
+	public static void createAccounts() {
+		
+	}
 
 	public static PlayerAccounts getAccounts() {
 		return m_accounts;
