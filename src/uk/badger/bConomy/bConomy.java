@@ -8,7 +8,7 @@ public class bConomy extends JavaPlugin {
 		
 		Global.outputToConsole("Initialising bConomy");
 		Global.setPlugin(this);
-		
+		Global.loadAccounts(this);
 		
 		
 	}
