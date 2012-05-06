@@ -15,6 +15,7 @@ public class bConomy extends JavaPlugin {
 		Global.setPlugin(this);
 
 		m_dbmanager = new DatabaseManager(this);
+		m_dbmanager.setupDatabase();
 		Config.setupConfig();
 	}
 	
