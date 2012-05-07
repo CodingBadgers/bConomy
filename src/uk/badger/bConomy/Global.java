@@ -1,11 +1,14 @@
 package uk.badger.bConomy;
 
+import java.text.DecimalFormat;
+
 import n3wton.me.BukkitDatabaseManager.Database.BukkitDatabase;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.badger.bConomy.account.Account;
 import uk.badger.bConomy.account.PlayerAccounts;
+import uk.badger.bConomy.config.Config;
 
 public class Global {
 	
@@ -66,6 +69,16 @@ public class Global {
 	 */
 	public static void addAccout(Account account) {
 		m_accounts.add(account);	
+	}
+	
+	public static String format(double amount) {
+		DecimalFormat format = new DecimalFormat("#,##0.00");
+		String formatted = format.format(amount);
+		
+		if (formatted.endsWith("."))
+			formatted = formatted.substring(0, formatted.length() - 1);
+		
+		return Config.currencySymbol + formatted;
 	}
 
 }

@@ -14,19 +14,12 @@ import n3wton.me.BukkitDatabaseManager.BukkitDatabaseManager.DatabaseType;
 
 public class DatabaseManager {
 	
-	/**
-	 * the plugin instance, used to get the offline player
-	 */
-	private JavaPlugin m_plugin;
-	
-	public DatabaseManager(JavaPlugin instance) {
-		m_plugin = instance;
-	}
-	
 	/** 
 	 * Sets up the database and loads in all the infomation in the table
+	 * 
+	 * @param plugin - the java plugin used to setup the database, used to get the offline player
 	 */
-	public void setupDatabase(){
+	public static void setupDatabase(JavaPlugin plugin){
 		
 		// creates the database instance
 		Global.m_database = BukkitDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), DatabaseType.SQL);
@@ -55,7 +48,7 @@ public class DatabaseManager {
 			while(result.next()) {
 				int id = result.getInt("id");
 				String name = result.getString("name");
-				OfflinePlayer player = m_plugin.getServer().getOfflinePlayer(name);
+				OfflinePlayer player = plugin.getServer().getOfflinePlayer(name);
 				double balance = result.getDouble("balance");
 				
 				// create the account and then add it to the array
@@ -65,5 +58,64 @@ public class DatabaseManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void addAccount(Account account) {
+		
+		if (account == null)
+			return;
+		
+		String query = "INSET INTO accounts (" +
+				"'id', 'name', 'balance') VALUES" +
+				"'" + account.getId() + "', " +
+				"'" + account.getPlayer().getName() + ", " +
+				"'" + account.getBalance() + "'" +
+				");";
+		
+		Global.m_database.Query(query, true);
+		
+		Global.outputToConsole("Account " + account.getId() + " has been added to the database.");
+	}
+	
+	public static void updateAccount(Account account){
+		
+		if (account == null)
+			return;
+		
+		String query = "SELECT * FROM accounts WHERE name='"+ account.getPlayer().getName() + "';";
+		ResultSet result = Global.m_database.QueryResult(query);
+		
+		try {
+			if (result.next() == false)
+				return;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return;
+		}
+		
+		query = "UPDATE accounts (" +
+				 "SET name='" + account.getPlayer().getName() + ", " +
+				 "balance='" + account.getBalance() + "'" +
+				 "WHERE id='" + account.getId() +
+				 ";";
+		
+		Global.m_database.Query(query);
+ 	}
+	
+	public static void removeAccount(Account account) {
+		
+		if (account == null)
+			return;
+		
+		String query = "DELETE * FROM accounts WHERE " +
+						"id=" + account.getId() + " AND" +
+						"name='" + account.getPlayer().getName() + "'" +
+						";";
+		
+		Global.m_database.Query(query);
+	}
+	
+	public static void executeQuery(String query) {
+		Global.m_database.Query(query);
 	}
 }

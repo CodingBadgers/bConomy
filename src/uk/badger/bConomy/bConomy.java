@@ -6,16 +6,14 @@ import uk.badger.bConomy.config.Config;
 import uk.badger.bConomy.config.DatabaseManager;
 
 public class bConomy extends JavaPlugin {
-
-	DatabaseManager m_dbmanager;
 	
 	public void onEnable() {
 		
 		Global.outputToConsole("Initialising bConomy");
 		Global.setPlugin(this);
 
-		m_dbmanager = new DatabaseManager(this);
-		m_dbmanager.setupDatabase();
+		// setup config and database
+		DatabaseManager.setupDatabase(this);
 		Config.setupConfig();
 	}
 	
