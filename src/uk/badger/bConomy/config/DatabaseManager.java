@@ -19,7 +19,7 @@ public class DatabaseManager {
 	 * 
 	 * @param plugin - the java plugin used to setup the database, used to get the offline player
 	 */
-	public static void setupDatabase(JavaPlugin plugin){
+	public static void setupDatabase(JavaPlugin plugin) {
 		
 		// creates the database instance
 		Global.m_database = BukkitDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), DatabaseType.SQL);

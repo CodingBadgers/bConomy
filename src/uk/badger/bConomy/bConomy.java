@@ -9,12 +9,12 @@ public class bConomy extends JavaPlugin {
 	
 	public void onEnable() {
 		
-		Global.outputToConsole("Initialising bConomy");
 		Global.setPlugin(this);
+		Global.outputToConsole("Initialising bConomy");
 
 		// setup config and database
-		DatabaseManager.setupDatabase(this);
 		Config.setupConfig();
+		DatabaseManager.setupDatabase(this);
 	}
 	
 }
