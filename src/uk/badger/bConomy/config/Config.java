@@ -49,6 +49,8 @@ public class Config {
 		m_currencySymbol = config.getString("economy.currencySymbol", "£");
 		m_startingBalance = config.getInt("economy.startingBalance", 30);
 		
+		Global.getPlugin().saveConfig();
+		
 		return true;
 	}
 }
