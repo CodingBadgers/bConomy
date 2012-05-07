@@ -33,14 +33,14 @@ public class DatabaseManager {
 			// creates the accounts table
 			String query = "CREATE TABLE " + Config.m_dbInfo.tablename + " (" +
 							"id INT," +
-							"name VARCHAR(64)," +
+							"username VARCHAR(64)," +
 							"balance DOUBLE" +
 							");";
 			
 			Global.m_database.Query(query, true);
 		}
 		
-		String query = "SELECT * FROM accounts";
+		String query = "SELECT * FROM " + Config.m_dbInfo.tablename;
 		ResultSet result = Global.m_database.QueryResult(query);
 		
 		if (result == null)
