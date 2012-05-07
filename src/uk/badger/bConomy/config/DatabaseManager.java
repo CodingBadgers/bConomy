@@ -50,7 +50,7 @@ public class DatabaseManager {
 		try {
 			while(result.next()) {
 				int id = result.getInt("id");
-				String name = result.getString("name");
+				String name = result.getString("username");
 				OfflinePlayer player = plugin.getServer().getOfflinePlayer(name);
 				double balance = result.getDouble("balance");
 				
@@ -69,7 +69,7 @@ public class DatabaseManager {
 			return;
 		
 		String query = "INSET INTO " + Config.m_dbInfo.tablename + " (" +
-				"'id', 'name', 'balance') VALUES" +
+				"'id', 'username', 'balance') VALUES" +
 				"'" + account.getId() + "', " +
 				"'" + account.getPlayer().getName() + ", " +
 				"'" + account.getBalance() + "'" +
@@ -85,19 +85,8 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "SELECT * FROM " + Config.m_dbInfo.tablename + " WHERE name='"+ account.getPlayer().getName() + "';";
-		ResultSet result = Global.m_database.QueryResult(query);
-		
-		try {
-			if (result.next() == false)
-				return;
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-			return;
-		}
-		
-		query = "UPDATE " + Config.m_dbInfo.tablename + " (" +
-				 "SET name='" + account.getPlayer().getName() + ", " +
+		String query = "UPDATE " + Config.m_dbInfo.tablename + " (" +
+				 "SET username='" + account.getPlayer().getName() + ", " +
 				 "balance='" + account.getBalance() + "'" +
 				 "WHERE id='" + account.getId() +
 				 ";";
@@ -111,9 +100,7 @@ public class DatabaseManager {
 			return;
 		
 		String query = "DELETE * FROM " + Config.m_dbInfo.tablename + " WHERE " +
-						"id=" + account.getId() + " AND" +
-						"name='" + account.getPlayer().getName() + "'" +
-						";";
+						"id=" + account.getId() + ";";
 		
 		Global.m_database.Query(query);
 	}
