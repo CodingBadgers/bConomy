@@ -32,8 +32,8 @@ public class DatabaseManager {
 			
 			// creates the accounts table
 			String query = "CREATE TABLE accounts (" +
-							"id INT" +
-							"name VARCHAR(64)" +
+							"id INT," +
+							"name VARCHAR(64)," +
 							"balance DOUBLE" +
 							");";
 			
