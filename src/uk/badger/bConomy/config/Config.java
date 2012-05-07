@@ -6,7 +6,7 @@ import uk.badger.bConomy.Global;
 
 public class Config {
 
-	public class DatabaseInfo {
+	public static class DatabaseInfo {
 		public String host;
 		public String dbname;
 		public String user;
@@ -14,7 +14,7 @@ public class Config {
 		public int port = 3306;
 	}
 	
-	public static Config.DatabaseInfo m_dbInfo = null;
+	public static DatabaseInfo m_dbInfo = null;
 	public static String m_currency;
 	public static int m_startingBalance;
 	public static String m_currencySymbol;
@@ -38,7 +38,7 @@ public class Config {
 			return false;
 		}
 		
-
+		m_dbInfo = new DatabaseInfo();
 		m_dbInfo.host = config.getString("database.host", "localhost");
 		m_dbInfo.dbname = config.getString("database.dbname", "bConomy");
 		m_dbInfo.user = config.getString("database.user", "root");
