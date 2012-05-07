@@ -3,6 +3,8 @@ package uk.badger.bConomy.account;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import uk.badger.bConomy.config.Config;
+
 public class Account {
 	
 	private int m_id = 0;
@@ -18,7 +20,7 @@ public class Account {
 	public Account(int id, OfflinePlayer player){
 		m_id = id;
 		m_player = player;
-		m_balance = 0;
+		m_balance = Config.m_startingBalance;
 	}
 	
 	/**

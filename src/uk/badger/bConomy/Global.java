@@ -78,7 +78,7 @@ public class Global {
 		if (formatted.endsWith("."))
 			formatted = formatted.substring(0, formatted.length() - 1);
 		
-		return Config.currencySymbol + formatted;
+		return Config.m_currencySymbol + formatted;
 	}
 
 }
