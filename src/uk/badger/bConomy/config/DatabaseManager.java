@@ -43,6 +43,9 @@ public class DatabaseManager {
 		String query = "SELECT * FROM accounts";
 		ResultSet result = Global.m_database.QueryResult(query);
 		
+		if (result == null)
+			return;
+		
 		// load in the accounts
 		try {
 			while(result.next()) {
