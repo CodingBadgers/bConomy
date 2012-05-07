@@ -9,6 +9,7 @@ public class Config {
 	public static class DatabaseInfo {
 		public String host;
 		public String dbname;
+		public String tablename;
 		public String user;
 		public String password;
 		public int port = 3306;
@@ -26,6 +27,7 @@ public class Config {
 		try {
 			config.addDefault("database.host", "localhost");
 			config.addDefault("database.dbname", "bConomy");
+			config.addDefault("database.tablename", "bConomy");
 			config.addDefault("database.user", "root");
 			config.addDefault("database.password", "");
 			config.addDefault("database.port", 3306);
@@ -41,6 +43,7 @@ public class Config {
 		m_dbInfo = new DatabaseInfo();
 		m_dbInfo.host = config.getString("database.host", "localhost");
 		m_dbInfo.dbname = config.getString("database.dbname", "bConomy");
+		m_dbInfo.tablename = config.getString("database.tablename", "bConomy");
 		m_dbInfo.user = config.getString("database.user", "root");
 		m_dbInfo.password = config.getString("database.password", "");
 		m_dbInfo.port = config.getInt("database.port", 3306);

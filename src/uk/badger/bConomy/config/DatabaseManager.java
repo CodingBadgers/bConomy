@@ -26,12 +26,12 @@ public class DatabaseManager {
 		// logs in using values from the config
 		Global.m_database.login(Config.m_dbInfo.host, Config.m_dbInfo.user, Config.m_dbInfo.password, Config.m_dbInfo.port);
 	
-		if (!Global.m_database.TableExists("accounts")) {
+		if (!Global.m_database.TableExists(Config.m_dbInfo.tablename)) {
 			
 			Global.outputToConsole("Could not find 'accounts' table, creating default now.");
 			
 			// creates the accounts table
-			String query = "CREATE TABLE accounts (" +
+			String query = "CREATE TABLE " + Config.m_dbInfo.tablename + " (" +
 							"id INT," +
 							"name VARCHAR(64)," +
 							"balance DOUBLE" +
@@ -68,7 +68,7 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "INSET INTO accounts (" +
+		String query = "INSET INTO " + Config.m_dbInfo.tablename + " (" +
 				"'id', 'name', 'balance') VALUES" +
 				"'" + account.getId() + "', " +
 				"'" + account.getPlayer().getName() + ", " +
@@ -85,7 +85,7 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "SELECT * FROM accounts WHERE name='"+ account.getPlayer().getName() + "';";
+		String query = "SELECT * FROM " + Config.m_dbInfo.tablename + " WHERE name='"+ account.getPlayer().getName() + "';";
 		ResultSet result = Global.m_database.QueryResult(query);
 		
 		try {
@@ -96,7 +96,7 @@ public class DatabaseManager {
 			return;
 		}
 		
-		query = "UPDATE accounts (" +
+		query = "UPDATE " + Config.m_dbInfo.tablename + " (" +
 				 "SET name='" + account.getPlayer().getName() + ", " +
 				 "balance='" + account.getBalance() + "'" +
 				 "WHERE id='" + account.getId() +
@@ -110,7 +110,7 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "DELETE * FROM accounts WHERE " +
+		String query = "DELETE * FROM " + Config.m_dbInfo.tablename + " WHERE " +
 						"id=" + account.getId() + " AND" +
 						"name='" + account.getPlayer().getName() + "'" +
 						";";
