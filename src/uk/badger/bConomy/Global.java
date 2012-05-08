@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 
 import n3wton.me.BukkitDatabaseManager.Database.BukkitDatabase;
 
+import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.badger.bConomy.account.Account;
@@ -79,6 +80,10 @@ public class Global {
 			formatted = formatted.substring(0, formatted.length() - 1);
 		
 		return Config.m_currencySymbol + formatted;
+	}
+	
+	public static Server getServer() {
+		return m_plugin.getServer();
 	}
 
 }

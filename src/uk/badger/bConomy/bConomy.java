@@ -2,8 +2,10 @@ package uk.badger.bConomy;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import uk.badger.bConomy.account.Account;
 import uk.badger.bConomy.config.Config;
 import uk.badger.bConomy.config.DatabaseManager;
 
@@ -22,10 +24,17 @@ public class bConomy extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
 		if (commandLabel.equalsIgnoreCase("money")) {
-			
+						
 			// show the help
 			if (args[0].equalsIgnoreCase("?") || args[0].equalsIgnoreCase("help")) {
 				showHelp(sender);
+				return true;
+			}
+			
+			
+			// handle /money last
+			if (args.length < 2) {
+				handleMoney(sender, args);
 				return true;
 			}
 			
@@ -33,6 +42,32 @@ public class bConomy extends JavaPlugin {
 		}
 		
 		return false;
+	}
+
+	private void handleMoney(CommandSender sender, String[] args) {
+			
+		Account playerAccount = null;
+		
+		if (args.length == 1) {
+			playerAccount = Global.getAccounts().get(args[0]);
+		}
+		
+		// not looking for an account and command is from console get out of here
+		if (playerAccount == null && !(sender instanceof Player)) {
+			sender.sendMessage("[bConomy] The console does not have an account.");
+			sender.sendMessage("[bConomy] Use /money <name>.");
+			return;
+		} else if (playerAccount == null) {
+			playerAccount = Global.getAccounts().get(((Player)sender).getName());
+		}
+		
+		// could not fins an account
+		if (playerAccount == null) {
+			sender.sendMessage("[bConomy] Could not find an account for that player.");
+			return;
+		}
+		
+		sender.sendMessage("[bConomy] " + playerAccount.getPlayer().getName() + " has " + playerAccount.getBalance() );
 	}
 
 	private void showHelp(CommandSender sender) {
