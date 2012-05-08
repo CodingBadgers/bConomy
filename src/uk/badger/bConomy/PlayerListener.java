@@ -1,0 +1,47 @@
+package uk.badger.bConomy;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import uk.badger.bConomy.account.Account;
+import uk.badger.bConomy.config.Config;
+import uk.badger.bConomy.config.DatabaseManager;
+
+public class PlayerListener implements Listener {
+
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		
+		Player player = event.getPlayer();
+		Account account = Global.getAccounts().get(player);
+		if (account == null) {
+			// new player, create an account
+			account = new Account(Global.getAccounts().size(), player, Config.m_startingBalance);
+			Global.getAccounts().add(account);
+			DatabaseManager.addAccount(account);
+		}		
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerJoin(PlayerQuitEvent event) {
+		
+		Player player = event.getPlayer();
+		Account account = Global.getAccounts().get(player);
+		if (account == null)
+			return;
+		
+		if (account.getBalance() == Config.m_startingBalance) {
+			// default balance so delete them from the database
+			DatabaseManager.removeAccount(account);	
+			return;
+		}
+		
+		DatabaseManager.updateAccount(account);
+		
+	}
+	
+}
