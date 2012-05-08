@@ -35,6 +35,11 @@ public class bConomy extends JavaPlugin {
 				return true;
 			}
 			
+			// handle /money pay
+			if (args.length != 0 && args[0].equalsIgnoreCase("pay")) {
+				handlePay(sender, args);
+				return true;
+			}			
 			
 			// handle /money last
 			if (args.length <= 1) {
@@ -48,9 +53,60 @@ public class bConomy extends JavaPlugin {
 		return false;
 	}
 
+	private void handlePay(CommandSender sender, String[] args) {
+		
+		if (!Global.hasPermission(sender, "bconomy.pay", true)) {
+			return;
+		}
+		
+		if (!(sender instanceof Player)) {
+			Global.output(sender, "The console can not use the pay command, use grant instead");
+			return;
+		}
+		
+		if (args.length != 3) {
+			Global.output(sender, "Invalid usage. /money pay <player> <ammount>");
+			return;
+		}
+		
+		Account playerAccount = Global.getAccounts().get(args[1]);
+		
+		if (playerAccount == null) {
+			Global.output(sender, "Could not find an account for the player " + args[1]);
+			return;
+		}
+		
+		double amount = 0;
+		try {
+			amount = Double.parseDouble(args[2]);
+		} catch(Exception ex) {
+			Global.output(sender, "Could not understand the amount " + args[2]);
+			return;
+		}
+		
+		if (amount <= 0) {
+			Global.output(sender, "You cannot pay someone a negative amount");
+			return;
+		}
+		
+		Account myAccount = Global.getAccounts().get((Player)sender);
+		
+		if (!myAccount.has(amount)) {
+			Global.output(sender, "You don't have enough money to pay that");
+			return;
+		}
+		
+		myAccount.withdraw(amount);
+		playerAccount.deposit(amount);
+		
+		Global.output(sender, "You have paid " + args[1] + " " + Global.format(amount));
+		Global.output(playerAccount.getPlayer(), "You have been paid " + Global.format(amount) + " by " + myAccount.getPlayer().getName());
+		
+	}
+
 	private void handleMoney(CommandSender sender, String[] args) {
 		
-		if (!Global.hasPermission(sender, "bconomy.admin.grant", true)) {
+		if (!Global.hasPermission(sender, "bconomy.money", true)) {
 			return;
 		}
 			
@@ -83,17 +139,17 @@ public class bConomy extends JavaPlugin {
 		sender.sendMessage(ChatColor.GOLD + "-- bConomy --");
 		
 		sender.sendMessage("/money [name] - Displays the amount of money in an account");
-		sender.sendMessage("/money pay (name) (amount) - Pays a player");
+		sender.sendMessage("/money pay <name> <amount> - Pays a player");
 		sender.sendMessage("/money top [amount] - Shows the top player balances");
 		
 		if (Global.hasPermission(sender, "bconomy.admin.grant", false))
-			sender.sendMessage("/money grant (name) (amount) - Grants a player money");
+			sender.sendMessage("/money grant <name> <amount> - Grants a player money");
 		
 		if (Global.hasPermission(sender, "bconomy.admin.withdraw", false))
-			sender.sendMessage("/money withdraw (name) (amount) - Withdraws from an account");
+			sender.sendMessage("/money withdraw <name> <amount> - Withdraws from an account");
 		
 		if (Global.hasPermission(sender, "bconomy.admin.set", false))
-			sender.sendMessage("/money set (name) (amount) - Sets a players balance");
+			sender.sendMessage("/money set <name> <amount> - Sets a players balance");
 		
 		if (Global.hasPermission(sender, "bconomy.admin.reset", false))
 			sender.sendMessage("/money reset (name) - Resets a players balance");

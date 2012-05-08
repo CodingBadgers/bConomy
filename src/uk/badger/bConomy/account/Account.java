@@ -4,6 +4,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import uk.badger.bConomy.config.Config;
+import uk.badger.bConomy.config.DatabaseManager;
 
 public class Account {
 	
@@ -88,6 +89,7 @@ public class Account {
 	 */
 	public void setBalance(double balance) {
 		m_balance = balance;
+		DatabaseManager.updateAccount(this);
 	}
 	
 	/**
@@ -97,6 +99,7 @@ public class Account {
 	 */
 	public void deposit(double amount) {
 		m_balance += amount;
+		DatabaseManager.updateAccount(this);
 	}
 	
 	/**
@@ -106,6 +109,7 @@ public class Account {
 	 */
 	public void withdraw(double amount) {
 		m_balance -= amount;
+		DatabaseManager.updateAccount(this);
 	}
 	
 	/** 

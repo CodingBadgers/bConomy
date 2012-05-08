@@ -86,11 +86,9 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "UPDATE " + Config.m_dbInfo.tablename + " (" +
-				 "SET username='" + account.getPlayer().getName() + ", " +
-				 "balance='" + account.getBalance() + "'" +
-				 "WHERE id='" + account.getId() +
-				 ";";
+		String query = "UPDATE " + Config.m_dbInfo.tablename +
+				 " SET balance='" + account.getBalance() + "' " +
+				 "WHERE id='" + account.getId() + "';";
 		
 		Global.m_database.Query(query);
  	}

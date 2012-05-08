@@ -6,6 +6,7 @@ import n3wton.me.BukkitDatabaseManager.Database.BukkitDatabase;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,16 +16,27 @@ import uk.badger.bConomy.account.Account;
 import uk.badger.bConomy.account.PlayerAccounts;
 import uk.badger.bConomy.config.Config;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Global.
+ */
 public class Global {
 	
+	/** The m_plugin. */
 	private static JavaPlugin m_plugin = null;
+	
+	/** The m_accounts. */
 	private static PlayerAccounts m_accounts = null;
+	
+	/** The m_database. */
 	public static BukkitDatabase m_database = null;
+	
+	/** The permission. */
 	private static Permission permission = null;
 
 	/**
-	 * get the JavaPlugin instance
-	 * 
+	 * get the JavaPlugin instance.
+	 *
 	 * @return the plugin instance
 	 */
 	public static JavaPlugin getPlugin() {
@@ -32,8 +44,8 @@ public class Global {
 	}
 	
 	/**
-	 * Set the plugin instance
-	 * 
+	 * Set the plugin instance.
+	 *
 	 * @param plugin - the plugin instance to use
 	 */
 	public static void setPlugin(JavaPlugin plugin) {
@@ -42,8 +54,8 @@ public class Global {
 	}
 	
 	/**
-	 * Output a message to console
-	 * 
+	 * Output a message to console.
+	 *
 	 * @param message to output
 	 */
 	public static void outputToConsole(String message) {
@@ -52,8 +64,8 @@ public class Global {
 	}
 
 	/**
-	 * Get the accounts array
-	 * 
+	 * Get the accounts array.
+	 *
 	 * @return the accounts array
 	 */
 	public static PlayerAccounts getAccounts() {
@@ -61,8 +73,8 @@ public class Global {
 	}
 
 	/**
-	 * Set the accounts array 
-	 * 
+	 * Set the accounts array.
+	 *
 	 * @param m_accounts - the array to set it to
 	 */
 	public static void setAccounts(PlayerAccounts m_accounts) {
@@ -70,8 +82,8 @@ public class Global {
 	}
 
 	/**
-	 * Add a account to the array
-	 * 
+	 * Add a account to the array.
+	 *
 	 * @param account to add
 	 */
 	public static void addAccout(Account account) {
@@ -79,7 +91,7 @@ public class Global {
 	}
 	
 	/**
-	 * Format a number to a usable string
+	 * Format a number to a usable string.
 	 *
 	 * @param amount the amount
 	 * @return the string
@@ -113,6 +125,18 @@ public class Global {
 		sender.sendMessage(ChatColor.GOLD + "[bConomy] " + ChatColor.WHITE + message);
 	}
 	
+	/**
+	 * Output.
+	 *
+	 * @param player the player
+	 * @param message the message
+	 */
+	public static void output(OfflinePlayer player, String message) {
+		if (player.isOnline()) {
+			player.getPlayer().sendMessage(ChatColor.GOLD + "[bConomy] " + ChatColor.WHITE + message);
+		}
+	}
+	
 	
 	/**
 	 * Checks for permission.
@@ -144,7 +168,6 @@ public class Global {
 		}
 		
 		return false;		
-	}
-	
+	}	
 	
 }
