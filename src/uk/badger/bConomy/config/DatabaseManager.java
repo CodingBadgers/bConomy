@@ -68,16 +68,17 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "INSET INTO " + Config.m_dbInfo.tablename + " (" +
-				"'id', 'username', 'balance') VALUES" +
-				"'" + account.getId() + "', " +
-				"'" + account.getPlayer().getName() + ", " +
-				"'" + account.getBalance() + "'" +
-				");";
+		//INSERT INTO `mcbadg_server`.`bConomy` (`id`, `username`, `balance`) VALUES ('0', 'n3wton', '30');
 		
+		String query = 	"INSERT INTO " + Config.m_dbInfo.tablename + " " +
+						"(`id`, `username`, `balance`) VALUES (" +
+						"'" + account.getId() + "', " +
+						"'" + account.getPlayer().getName() + "', " +
+						"'" + account.getBalance() + "');";
+				
 		Global.m_database.Query(query, true);
 		
-		Global.outputToConsole("Account " + account.getId() + " has been added to the database.");
+		Global.outputToConsole("Account " + account.getPlayer().getName() + " has been added to the database.");
 	}
 	
 	public static void updateAccount(Account account){
@@ -99,10 +100,12 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "DELETE * FROM " + Config.m_dbInfo.tablename + " WHERE " +
-						"id=" + account.getId() + ";";
+		String query = "DELETE FROM " + Config.m_dbInfo.tablename + " WHERE " +
+						"'id'=" + account.getId() + ";";
 		
 		Global.m_database.Query(query);
+		Global.getAccounts().remove(account);		
+		Global.outputToConsole("Removed the account " + account.getPlayer().getName());
 	}
 	
 	public static void executeQuery(String query) {

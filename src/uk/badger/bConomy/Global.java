@@ -3,8 +3,12 @@ package uk.badger.bConomy;
 import java.text.DecimalFormat;
 
 import n3wton.me.BukkitDatabaseManager.Database.BukkitDatabase;
+import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.badger.bConomy.account.Account;
@@ -16,6 +20,7 @@ public class Global {
 	private static JavaPlugin m_plugin = null;
 	private static PlayerAccounts m_accounts = null;
 	public static BukkitDatabase m_database = null;
+	private static Permission permission = null;
 
 	/**
 	 * get the JavaPlugin instance
@@ -33,6 +38,7 @@ public class Global {
 	 */
 	public static void setPlugin(JavaPlugin plugin) {
 		m_plugin = plugin;
+		m_accounts = new PlayerAccounts();
 	}
 	
 	/**
@@ -72,6 +78,12 @@ public class Global {
 		m_accounts.add(account);	
 	}
 	
+	/**
+	 * Format a number to a usable string
+	 *
+	 * @param amount the amount
+	 * @return the string
+	 */
 	public static String format(double amount) {
 		DecimalFormat format = new DecimalFormat("#,##0.00");
 		String formatted = format.format(amount);
@@ -82,8 +94,57 @@ public class Global {
 		return Config.m_currencySymbol + formatted;
 	}
 	
+	/**
+	 * Gets the server.
+	 *
+	 * @return the server
+	 */
 	public static Server getServer() {
 		return m_plugin.getServer();
 	}
 
+	/**
+	 * Output a formatted message to a sender (console or player).
+	 *
+	 * @param sender the sender
+	 * @param message the message
+	 */
+	public static void output(CommandSender sender, String message) {
+		sender.sendMessage(ChatColor.GOLD + "[bConomy] " + ChatColor.WHITE + message);
+	}
+	
+	
+	/**
+	 * Checks for permission.
+	 *
+	 * @param sender the sender
+	 * @param perm the perm
+	 * @param verbose the verbose
+	 * @return true, if successful
+	 */
+	public static boolean hasPermission(CommandSender sender, String perm, boolean verbose) {
+		
+		// Are we console?
+		if (!(sender instanceof Player))
+			return true;
+		
+		// Are we an op?
+		Player player = (Player)sender;
+		if (player.isOp() == true)
+			return true;
+		
+		// use vault to check perms
+		if (permission.has(sender, perm)) {
+			return true;
+		}
+		
+		// by now they don't have perms so see if we are outputting a message
+		if (verbose) {
+			Global.output(sender, "You do not have the required permssions - " + perm);
+		}
+		
+		return false;		
+	}
+	
+	
 }
