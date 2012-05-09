@@ -22,10 +22,14 @@ public class DatabaseManager {
 	public static void setupDatabase(JavaPlugin plugin) {
 		
 		// creates the database instance
-		Global.m_database = BukkitDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), DatabaseType.SQL);
-		// logs in using values from the config
-		Global.m_database.login(Config.m_dbInfo.host, Config.m_dbInfo.user, Config.m_dbInfo.password, Config.m_dbInfo.port);
-	
+		Global.m_database = BukkitDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), Config.m_dbInfo.driver);
+		
+		// login if sql 
+		if (Config.m_dbInfo.driver == DatabaseType.SQL) {
+			// logs in using values from the config
+			Global.m_database.login(Config.m_dbInfo.host, Config.m_dbInfo.user, Config.m_dbInfo.password, Config.m_dbInfo.port);
+		}
+		
 		if (!Global.m_database.TableExists(Config.m_dbInfo.tablename)) {
 			
 			Global.outputToConsole("Could not find 'accounts' table, creating default now.");
@@ -63,6 +67,11 @@ public class DatabaseManager {
 		}
 	}
 
+	/**
+	 * Add a account to the database
+	 * 
+	 * @param account the account to add
+	 */
 	public static void addAccount(Account account) {
 		
 		if (account == null)
@@ -81,6 +90,11 @@ public class DatabaseManager {
 		Global.outputToConsole("Account " + account.getPlayer().getName() + " has been added to the database.");
 	}
 	
+	/**
+	 * Update a account on the database
+	 * 
+	 * @param account the account to update
+	 */
 	public static void updateAccount(Account account){
 		
 		if (account == null)
@@ -93,6 +107,11 @@ public class DatabaseManager {
 		Global.m_database.Query(query);
  	}
 	
+	/**
+	 * Remove a account from the database
+	 * 
+	 * @param account to remove
+	 */
 	public static void removeAccount(Account account) {
 		
 		if (account == null)
@@ -106,7 +125,13 @@ public class DatabaseManager {
 		Global.outputToConsole("Removed the account " + account.getPlayer().getName());
 	}
 	
-	public static void executeQuery(String query) {
-		Global.m_database.Query(query);
+	/**
+	 * Execute a one off query 
+	 * 
+	 * @param query to execute
+	 * @return the results
+	 */
+	public static ResultSet executeQuery(String query) {
+		return Global.m_database.QueryResult(query);
 	}
 }

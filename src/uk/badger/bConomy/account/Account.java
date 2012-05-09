@@ -18,7 +18,7 @@ public class Account {
 	 * @param id - the account id
 	 * @param player - the offline player to use
 	 */
-	public Account(int id, OfflinePlayer player){
+	public Account(int id, Player player){
 		m_id = id;
 		m_player = player;
 		m_balance = Config.m_startingBalance;

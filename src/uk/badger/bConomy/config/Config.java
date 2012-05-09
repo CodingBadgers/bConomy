@@ -1,5 +1,7 @@
 package uk.badger.bConomy.config;
 
+import n3wton.me.BukkitDatabaseManager.BukkitDatabaseManager.DatabaseType;
+
 import org.bukkit.configuration.file.FileConfiguration;
 
 import uk.badger.bConomy.Global;
@@ -7,6 +9,7 @@ import uk.badger.bConomy.Global;
 public class Config {
 
 	public static class DatabaseInfo {
+		public DatabaseType driver;
 		public String host;
 		public String dbname;
 		public String tablename;
@@ -25,6 +28,7 @@ public class Config {
 		FileConfiguration config = Global.getPlugin().getConfig();
 		
 		try {
+			config.addDefault("database.driver", "SQL");
 			config.addDefault("database.host", "localhost");
 			config.addDefault("database.dbname", "bConomy");
 			config.addDefault("database.tablename", "bConomy");
@@ -41,6 +45,7 @@ public class Config {
 		}
 		
 		m_dbInfo = new DatabaseInfo();
+		m_dbInfo.driver = DatabaseType.valueOf(config.getString("database.driver", "SQL"));
 		m_dbInfo.host = config.getString("database.host", "localhost");
 		m_dbInfo.dbname = config.getString("database.dbname", "bConomy");
 		m_dbInfo.tablename = config.getString("database.tablename", "bConomy");

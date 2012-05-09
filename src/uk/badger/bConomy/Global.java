@@ -10,13 +10,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.badger.bConomy.account.Account;
 import uk.badger.bConomy.account.PlayerAccounts;
 import uk.badger.bConomy.config.Config;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Global.
  */
@@ -158,7 +158,7 @@ public class Global {
 			return true;
 		
 		// use vault to check perms
-		if (permission.has(sender, perm)) {
+		if (permission.has(sender, perm)){
 			return true;
 		}
 		
@@ -169,5 +169,19 @@ public class Global {
 		
 		return false;		
 	}	
+	
+	/**
+	 * setup the vault permissions
+	 * 
+	 * @return whether it was successful
+	 */
+	public static boolean setupPermissions() {
+		if (getServer().getPluginManager().getPlugin("Vault") == null)
+			return false;
+		
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        permission = rsp.getProvider();
+        return permission != null;
+    }
 	
 }

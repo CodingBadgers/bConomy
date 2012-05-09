@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.badger.bConomy.account.Account;
+import uk.badger.bConomy.account.PlayerAccounts;
 import uk.badger.bConomy.config.Config;
 import uk.badger.bConomy.config.DatabaseManager;
 
@@ -17,16 +18,21 @@ public class bConomy extends JavaPlugin {
 	public void onEnable() {
 		
 		Global.setPlugin(this);
+		Global.setAccounts(new PlayerAccounts());
 		Global.outputToConsole("Initialising bConomy");
 		Global.getServer().getPluginManager().registerEvents(m_playerListener, this);
 
+		if (Global.setupPermissions()) {
+			Global.outputToConsole("Vault found, setup permissions through it");
+		}
+		
 		// setup config and database
 		Config.setupConfig();
 		DatabaseManager.setupDatabase(this);
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		
+
 		if (commandLabel.equalsIgnoreCase("money")) {
 						
 			// show the help
@@ -34,23 +40,180 @@ public class bConomy extends JavaPlugin {
 				showHelp(sender);
 				return true;
 			}
-			
+
 			// handle /money pay
 			if (args.length != 0 && args[0].equalsIgnoreCase("pay")) {
 				handlePay(sender, args);
 				return true;
 			}			
 			
+			// Admin cmds
+			// handle /money grant
+			if (args.length != 0 && args[0].equalsIgnoreCase("grant")) {
+				handleGrant(sender, args);
+				return true;
+			}
+			
+			// handle /money withdraw
+			if (args.length != 0 && args[0].equalsIgnoreCase("withdraw")) {
+				handleWithdraw(sender, args);
+				return true;
+			}
+
+			// handle /money set
+			if (args.length != 0 && args[0].equalsIgnoreCase("set")) {
+				handleSet(sender, args);
+				return true;
+			}
+			
+			// handle /money reset
+			if (args.length != 0 && args[0].equalsIgnoreCase("reset")) {
+				handleReset(sender, args);
+				return true;
+			}
+
 			// handle /money last
 			if (args.length <= 1) {
 				handleMoney(sender, args);
 				return true;
 			}
-			
+
 			return true;
 		}
 		
 		return false;
+	}
+
+	private void handleReset(CommandSender sender, String[] args) {
+		
+		if (!Global.hasPermission(sender, "bconomy.admin.reset", true))
+			return;
+		
+		if (args.length != 2) {
+			Global.output(sender, "Invalid usage. /money reset <player>");
+			return;
+		}
+		
+		Account playerAccount = Global.getAccounts().get(args[1]);
+		
+		if (playerAccount == null) {
+			Global.output(sender, "Could not find an account for the player " + args[1]);
+			return;
+		}
+		
+		double amount = Config.m_startingBalance;
+		
+		playerAccount.setBalance(amount);
+		Global.output(sender, "You have reset " + playerAccount.getPlayer().getName());
+	}
+
+	private void handleSet(CommandSender sender, String[] args) {
+		
+		if (!Global.hasPermission(sender, "bconomy.admin.set", true))
+			return;
+		
+		if (args.length != 3) {
+			Global.output(sender, "Invalid usage. /money set <player> <amount>");
+			return;
+		}
+		
+		Account playerAccount = Global.getAccounts().get(args[1]);
+		
+		if (playerAccount == null) {
+			Global.output(sender, "Could not find an account for the player " + args[1]);
+			return;
+		}
+		
+		double amount = 0;
+		try {
+			amount = Double.parseDouble(args[2]);
+		} catch(Exception ex) {
+			Global.output(sender, "Could not understand the amount " + args[2]);
+			return;
+		}
+		
+		if (amount <= 0) {
+			Global.output(sender, "You cannot set someone to a negative amount");
+			return;
+		}
+		
+		playerAccount.setBalance(amount);
+		Global.output(sender, "You have set " + playerAccount.getPlayer().getName() + " to " + Global.format(amount));
+	}
+
+	private void handleWithdraw(CommandSender sender, String[] args) {
+
+		if (!Global.hasPermission(sender, "bconomy.admin.withdraw", true))
+			return;
+		
+		if (args.length != 3) {
+			Global.output(sender, "Invalid usage. /money withdraw <player> <amount>");
+			return;
+		}
+		
+		Account playerAccount = Global.getAccounts().get(args[1]);
+		
+		if (playerAccount == null) {
+			Global.output(sender, "Could not find an account for the player " + args[1]);
+			return;
+		}
+		
+		double amount = 0;
+		try {
+			amount = Double.parseDouble(args[2]);
+		} catch(Exception ex) {
+			Global.output(sender, "Could not understand the amount " + args[2]);
+			return;
+		}
+		
+		if (amount <= 0) {
+			Global.output(sender, "You cannot withdraw someone a negative amount");
+			return;
+		}
+		
+		if (!playerAccount.has(amount)) {
+			Global.output(sender, args[1] + " does not have that much money");
+			return;
+		}
+		
+		playerAccount.withdraw(amount);
+		Global.output(sender, "You have taken " + Global.format(amount) + " from "+ playerAccount.getPlayer().getName());
+		
+	}
+	
+	private void handleGrant(CommandSender sender, String[] args) {
+
+		if (!Global.hasPermission(sender, "bconomy.admin.grant", true))
+			return;
+		
+		if (args.length != 3) {
+			Global.output(sender, "Invalid usage. /money grant <player> <amount>");
+			return;
+		}
+		
+		Account playerAccount = Global.getAccounts().get(args[1]);
+		
+		if (playerAccount == null) {
+			Global.output(sender, "Could not find an account for the player " + args[1]);
+			return;
+		}
+		
+		double amount = 0;
+		try {
+			amount = Double.parseDouble(args[2]);
+		} catch(Exception ex) {
+			Global.output(sender, "Could not understand the amount " + args[2]);
+			return;
+		}
+		
+		if (amount <= 0) {
+			Global.output(sender, "You cannot pay someone a negative amount");
+			return;
+		}
+		
+		playerAccount.deposit(amount);
+		Global.output(sender, "You have given " + playerAccount.getPlayer().getName() + " " + Global.format(amount));
+		
 	}
 
 	private void handlePay(CommandSender sender, String[] args) {
@@ -136,8 +299,9 @@ public class bConomy extends JavaPlugin {
 	}
 
 	private void showHelp(CommandSender sender) {
+
 		sender.sendMessage(ChatColor.GOLD + "-- bConomy --");
-		
+
 		sender.sendMessage("/money [name] - Displays the amount of money in an account");
 		sender.sendMessage("/money pay <name> <amount> - Pays a player");
 		sender.sendMessage("/money top [amount] - Shows the top player balances");
