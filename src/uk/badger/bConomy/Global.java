@@ -32,7 +32,7 @@ public class Global {
 	public static BukkitDatabase m_database = null;
 	
 	/** The permission. */
-	private static Permission permission = null;
+	private static Permission m_permission = null;
 
 	/**
 	 * get the JavaPlugin instance.
@@ -158,7 +158,7 @@ public class Global {
 			return true;
 		
 		// use vault to check perms
-		if (permission.has(sender, perm)){
+		if (m_permission.has(sender, perm)){
 			return true;
 		}
 		
@@ -180,8 +180,8 @@ public class Global {
 			return false;
 		
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        permission = rsp.getProvider();
-        return permission != null;
+        m_permission = rsp.getProvider();
+        return m_permission != null;
     }
 	
 }

@@ -1,5 +1,7 @@
 package uk.badger.bConomy;
 
+import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,8 +15,12 @@ import uk.badger.bConomy.config.DatabaseManager;
 
 public class bConomy extends JavaPlugin {
 	
+	/** The player listener. */
 	private PlayerListener m_playerListener = new PlayerListener();
 	
+	/* (non-Javadoc)
+	 * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
+	 */
 	public void onEnable() {
 		
 		Global.setPlugin(this);
@@ -31,6 +37,9 @@ public class bConomy extends JavaPlugin {
 		DatabaseManager.setupDatabase(this);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.bukkit.plugin.java.JavaPlugin#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		if (commandLabel.equalsIgnoreCase("money")) {
@@ -71,6 +80,12 @@ public class bConomy extends JavaPlugin {
 				handleReset(sender, args);
 				return true;
 			}
+			
+			// handle /money top
+			if (args.length != 0 && args[0].equalsIgnoreCase("top")) {
+				handleTop(sender, args);
+				return true;
+			}
 
 			// handle /money last
 			if (args.length <= 1) {
@@ -84,6 +99,41 @@ public class bConomy extends JavaPlugin {
 		return false;
 	}
 
+	/**
+	 * Handle top.
+	 *
+	 * @param sender the sender
+	 * @param args the args
+	 */
+	private void handleTop(CommandSender sender, String[] args) {
+		
+		if (!Global.hasPermission(sender, "bconomy.top", true))
+			return;
+		
+		int amount = 5;
+		
+		if (args.length == 2) {
+			try {
+				amount = Integer.parseInt(args[1]);
+			} catch(Exception ex) {
+				amount = 5;
+			}
+		}
+		
+		ArrayList<Account> topPlayers = Global.getAccounts().getTop(amount);
+		
+		for (int i = 0; i < topPlayers.size(); ++i) {
+			Global.output(sender, (i+1) + " - " + topPlayers.get(i).getPlayer().getName() + " - " + topPlayers.get(i).getBalance() );
+		}
+		
+	}
+
+	/**
+	 * Handle reset.
+	 *
+	 * @param sender the sender
+	 * @param args the args
+	 */
 	private void handleReset(CommandSender sender, String[] args) {
 		
 		if (!Global.hasPermission(sender, "bconomy.admin.reset", true))
@@ -104,9 +154,15 @@ public class bConomy extends JavaPlugin {
 		double amount = Config.m_startingBalance;
 		
 		playerAccount.setBalance(amount);
-		Global.output(sender, "You have reset " + playerAccount.getPlayer().getName());
+		Global.output(sender, "You have reset '" + playerAccount.getPlayer().getName() + "s' balence");
 	}
 
+	/**
+	 * Handle set.
+	 *
+	 * @param sender the sender
+	 * @param args the args
+	 */
 	private void handleSet(CommandSender sender, String[] args) {
 		
 		if (!Global.hasPermission(sender, "bconomy.admin.set", true))
@@ -138,9 +194,15 @@ public class bConomy extends JavaPlugin {
 		}
 		
 		playerAccount.setBalance(amount);
-		Global.output(sender, "You have set " + playerAccount.getPlayer().getName() + " to " + Global.format(amount));
+		Global.output(sender, "You have set " + playerAccount.getPlayer().getName() + "s balence to " + Global.format(amount));
 	}
 
+	/**
+	 * Handle withdraw.
+	 *
+	 * @param sender the sender
+	 * @param args the args
+	 */
 	private void handleWithdraw(CommandSender sender, String[] args) {
 
 		if (!Global.hasPermission(sender, "bconomy.admin.withdraw", true))
@@ -181,6 +243,12 @@ public class bConomy extends JavaPlugin {
 		
 	}
 	
+	/**
+	 * Handle grant.
+	 *
+	 * @param sender the sender
+	 * @param args the args
+	 */
 	private void handleGrant(CommandSender sender, String[] args) {
 
 		if (!Global.hasPermission(sender, "bconomy.admin.grant", true))
@@ -216,6 +284,12 @@ public class bConomy extends JavaPlugin {
 		
 	}
 
+	/**
+	 * Handle pay.
+	 *
+	 * @param sender the sender
+	 * @param args the args
+	 */
 	private void handlePay(CommandSender sender, String[] args) {
 		
 		if (!Global.hasPermission(sender, "bconomy.pay", true)) {
@@ -267,6 +341,12 @@ public class bConomy extends JavaPlugin {
 		
 	}
 
+	/**
+	 * Handle money.
+	 *
+	 * @param sender the sender
+	 * @param args the args
+	 */
 	private void handleMoney(CommandSender sender, String[] args) {
 		
 		if (!Global.hasPermission(sender, "bconomy.money", true)) {
@@ -298,6 +378,11 @@ public class bConomy extends JavaPlugin {
 		Global.output(sender, playerAccount.getPlayer().getName() + " has " + Global.format(playerAccount.getBalance()) );
 	}
 
+	/**
+	 * Show help.
+	 *
+	 * @param sender the sender
+	 */
 	private void showHelp(CommandSender sender) {
 
 		sender.sendMessage(ChatColor.GOLD + "-- bConomy --");

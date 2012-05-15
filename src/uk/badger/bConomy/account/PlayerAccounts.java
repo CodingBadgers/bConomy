@@ -1,6 +1,8 @@
 package uk.badger.bConomy.account;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import org.bukkit.entity.Player;
@@ -79,5 +81,28 @@ public class PlayerAccounts extends ArrayList<Account> {
 
 		return null;
 	}
-
+	
+	public ArrayList<Account> getTop(int amount) {
+		
+		ArrayList<Account> sortedAccounts = this;
+		ArrayList<Account> topAccounts = new ArrayList<Account>();
+		
+		Collections.sort(sortedAccounts, new Comparator<Account>() {
+            public int compare(Account account, Account otherAccount) {
+                return (int)(account.getBalance() - otherAccount.getBalance());
+            }
+        });
+		
+		int start = sortedAccounts.size() - amount;
+		if (start < 0)
+			start = 0;
+		
+		for (int i = start; i < sortedAccounts.size(); ++i) {
+			topAccounts.add(sortedAccounts.get(i));
+		}
+		
+		return topAccounts;
+		
+	}
+	
 }
