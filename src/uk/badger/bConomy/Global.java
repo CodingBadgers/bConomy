@@ -97,13 +97,13 @@ public class Global {
 	 * @return the string
 	 */
 	public static String format(double amount) {
-		DecimalFormat format = new DecimalFormat("#,##0.00");
+		DecimalFormat format = new DecimalFormat(Config.m_currency.format);
 		String formatted = format.format(amount);
 		
 		if (formatted.endsWith("."))
 			formatted = formatted.substring(0, formatted.length() - 1);
 		
-		return Config.m_currencySymbol + formatted;
+		return formatted;
 	}
 	
 	/**

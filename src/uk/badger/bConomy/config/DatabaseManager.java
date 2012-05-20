@@ -22,12 +22,13 @@ public class DatabaseManager {
 	public static void setupDatabase(JavaPlugin plugin) {
 		
 		// creates the database instance
-		Global.m_database = BukkitDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), Config.m_dbInfo.driver);
+		Global.m_database = BukkitDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), Config.m_dbInfo.driver, Config.m_dbInfo.update);
 		
 		// login if sql 
 		if (Config.m_dbInfo.driver == DatabaseType.SQL) {
 			// logs in using values from the config
-			Global.m_database.login(Config.m_dbInfo.host, Config.m_dbInfo.user, Config.m_dbInfo.password, Config.m_dbInfo.port);
+			if (!Global.m_database.login(Config.m_dbInfo.host, Config.m_dbInfo.user, Config.m_dbInfo.password, Config.m_dbInfo.port))
+				return;
 		}
 		
 		if (!Global.m_database.TableExists(Config.m_dbInfo.tablename)) {

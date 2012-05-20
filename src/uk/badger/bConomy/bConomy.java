@@ -143,7 +143,7 @@ public class bConomy extends JavaPlugin {
 			Global.output(sender, "Invalid usage. /money reset <player>");
 			return;
 		}
-		
+
 		Account playerAccount = Global.getAccounts().get(args[1]);
 		
 		if (playerAccount == null) {
