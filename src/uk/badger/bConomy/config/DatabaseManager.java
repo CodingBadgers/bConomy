@@ -77,8 +77,6 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		//INSERT INTO `mcbadg_server`.`bConomy` (`id`, `username`, `balance`) VALUES ('0', 'n3wton', '30');
-		
 		String query = 	"INSERT INTO " + Config.m_dbInfo.tablename + " " +
 						"(`id`, `username`, `balance`) VALUES (" +
 						"'" + account.getId() + "', " +
@@ -117,8 +115,7 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "DELETE FROM " + Config.m_dbInfo.tablename + " WHERE " +
-						"'id'=" + account.getId() + ";";
+		String query = "DELETE FROM " + Config.m_dbInfo.tablename + " WHERE 'id'=" + account.getId() + ";";
 		
 		Global.m_database.Query(query);
 		Global.getAccounts().remove(account);		
