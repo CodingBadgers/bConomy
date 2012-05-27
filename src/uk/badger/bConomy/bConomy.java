@@ -123,7 +123,8 @@ public class bConomy extends JavaPlugin {
 		ArrayList<Account> topPlayers = Global.getAccounts().getTop(amount);
 		
 		for (int i = 0; i < topPlayers.size(); ++i) {
-			Global.output(sender, (i+1) + " - " + topPlayers.get(i).getPlayer().getName() + " - " + topPlayers.get(i).getBalance() );
+			int id = topPlayers.size() - i - 1;
+			Global.output(sender, (i+1) + " - " + topPlayers.get(id).getPlayer().getName() + " - " + Global.format(topPlayers.get(id).getBalance()) );
 		}
 		
 	}

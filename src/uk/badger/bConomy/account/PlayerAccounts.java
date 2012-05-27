@@ -89,7 +89,7 @@ public class PlayerAccounts extends ArrayList<Account> {
 		
 		Collections.sort(sortedAccounts, new Comparator<Account>() {
             public int compare(Account account, Account otherAccount) {
-                return (int)(otherAccount.getBalance() - account.getBalance());
+                return (int)(account.getBalance() - otherAccount.getBalance());
             }
         });
 		

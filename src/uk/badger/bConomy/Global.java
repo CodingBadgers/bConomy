@@ -164,7 +164,7 @@ public class Global {
 		
 		// by now they don't have perms so see if we are outputting a message
 		if (verbose) {
-			Global.output(sender, "You do not have the required permssions - " + perm);
+			Global.output(sender, "You do not have the required permissions - " + perm);
 		}
 		
 		return false;		
