@@ -86,6 +86,12 @@ public class bConomy extends JavaPlugin {
 				handleTop(sender, args);
 				return true;
 			}
+			
+			// handle /money grantall
+			if (args.length != 0 && args[0].equalsIgnoreCase("grantall")) {
+				handleGrantAll(sender, args);
+				return true;
+			}
 
 			// handle /money last
 			if (args.length <= 1) {
@@ -97,6 +103,36 @@ public class bConomy extends JavaPlugin {
 		}
 		
 		return false;
+	}
+	
+	private void handleGrantAll(CommandSender sender, String[] args) {
+
+		if (!Global.hasPermission(sender, "bconomy.admin.grant", true))
+			return;
+		
+		if (args.length != 2) {
+			Global.output(sender, "Invalid usage. /money grantall <amount>");
+			return;
+		}
+		
+		double amount = 0;
+		try {
+			amount = Double.parseDouble(args[1]);
+		} catch(Exception ex) {
+			Global.output(sender, "Could not understand the amount " + args[1]);
+			return;
+		}
+		
+		if (amount <= 0) {
+			Global.output(sender, "You cannot pay someone a negative amount");
+			return;
+		}
+		
+		for (Account account : Global.getAccounts()) {
+			account.deposit(amount);
+		}
+		Global.output(sender, "Given " + Global.format(amount) + " to all accounts registered.");
+		Global.broadcast(sender.getName() + " has given " + Global.format(amount) + " to all players");
 	}
 
 	/**

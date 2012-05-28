@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import n3wton.me.BukkitDatabaseManager.Database.BukkitDatabase;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -126,7 +127,7 @@ public class Global {
 	}
 	
 	/**
-	 * Output.
+	 * Output a formated message to a player
 	 *
 	 * @param player the player
 	 * @param message the message
@@ -135,6 +136,15 @@ public class Global {
 		if (player.isOnline()) {
 			player.getPlayer().sendMessage(ChatColor.GOLD + "[bConomy] " + ChatColor.WHITE + message);
 		}
+	}
+	
+	/**
+	 * Broadcasts a formated message to all players on the server
+	 * 
+	 * @param message the message
+	 */
+	public static void broadcast(String message) {
+		Bukkit.broadcastMessage(ChatColor.GOLD + "[bConomy] " + ChatColor.WHITE + message);
 	}
 	
 	

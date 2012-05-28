@@ -14,6 +14,8 @@ import n3wton.me.BukkitDatabaseManager.BukkitDatabaseManager.DatabaseType;
 
 public class DatabaseManager {
 	
+	private static boolean working = true;
+	
 	/** 
 	 * Sets up the database and loads in all the infomation in the table
 	 * 
@@ -27,8 +29,10 @@ public class DatabaseManager {
 		// login if sql 
 		if (Config.m_dbInfo.driver == DatabaseType.SQL) {
 			// logs in using values from the config
-			if (!Global.m_database.login(Config.m_dbInfo.host, Config.m_dbInfo.user, Config.m_dbInfo.password, Config.m_dbInfo.port))
+			if (!Global.m_database.login(Config.m_dbInfo.host, Config.m_dbInfo.user, Config.m_dbInfo.password, Config.m_dbInfo.port)) {
+				working = true;
 				return;
+			}
 		}
 		
 		if (!Global.m_database.TableExists(Config.m_dbInfo.tablename)) {
@@ -75,6 +79,9 @@ public class DatabaseManager {
 	 */
 	public static void addAccount(Account account) {
 		
+		if (!working)
+			return;
+		
 		if (account == null)
 			return;
 		
@@ -96,6 +103,9 @@ public class DatabaseManager {
 	 */
 	public static void updateAccount(Account account){
 		
+		if (!working)
+			return;
+		
 		if (account == null)
 			return;
 		
@@ -112,6 +122,9 @@ public class DatabaseManager {
 	 * @param account to remove
 	 */
 	public static void removeAccount(Account account) {
+		
+		if (!working)
+			return;
 		
 		if (account == null)
 			return;
@@ -130,6 +143,10 @@ public class DatabaseManager {
 	 * @return the results
 	 */
 	public static ResultSet executeQuery(String query) {
+		
+		if (!working)
+			return null;
+		
 		return Global.m_database.QueryResult(query);
 	}
 }
