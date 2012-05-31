@@ -131,6 +131,7 @@ public class bConomy extends JavaPlugin {
 		for (Account account : Global.getAccounts()) {
 			account.deposit(amount);
 		}
+		
 		Global.output(sender, "Given " + Global.format(amount) + " to all accounts registered.");
 		Global.broadcast(sender.getName() + " has given " + Global.format(amount) + " to all players");
 	}
@@ -318,6 +319,7 @@ public class bConomy extends JavaPlugin {
 		
 		playerAccount.deposit(amount);
 		Global.output(sender, "You have given " + playerAccount.getPlayer().getName() + " " + Global.format(amount));
+		Global.output(playerAccount.getPlayer(), "You have been granted " + Global.format(amount));
 		
 	}
 
@@ -428,8 +430,10 @@ public class bConomy extends JavaPlugin {
 		sender.sendMessage("/money pay <name> <amount> - Pays a player");
 		sender.sendMessage("/money top [amount] - Shows the top player balances");
 		
-		if (Global.hasPermission(sender, "bconomy.admin.grant", false))
+		if (Global.hasPermission(sender, "bconomy.admin.grant", false)) {
 			sender.sendMessage("/money grant <name> <amount> - Grants a player money");
+			sender.sendMessage("/money grantall <amount> - Grants all players money");
+		}
 		
 		if (Global.hasPermission(sender, "bconomy.admin.withdraw", false))
 			sender.sendMessage("/money withdraw <name> <amount> - Withdraws from an account");

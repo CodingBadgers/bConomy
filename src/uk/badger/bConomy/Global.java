@@ -1,6 +1,7 @@
 package uk.badger.bConomy;
 
 import java.text.DecimalFormat;
+import java.util.Iterator;
 
 import n3wton.me.BukkitDatabaseManager.Database.BukkitDatabase;
 import net.milkbowl.vault.permission.Permission;
@@ -34,6 +35,9 @@ public class Global {
 	
 	/** The permission. */
 	private static Permission m_permission = null;
+	
+	/** The next stored ID */
+	private static int m_nextStoredID = 0;
 
 	/**
 	 * get the JavaPlugin instance.
@@ -193,5 +197,29 @@ public class Global {
         m_permission = rsp.getProvider();
         return m_permission != null;
     }
+
+	public static int getNextId() {
+		
+		// if we have a stored ID increment and return
+		if (m_nextStoredID != 0) {
+			m_nextStoredID = m_nextStoredID + 1;
+			return m_nextStoredID;
+		}
+		
+		// work out the next ID by spinning through all the accounts
+		int nextId = 0;
+		Iterator<Account> it = m_accounts.iterator();
+		
+		while (it.hasNext()) {
+			Account acc = it.next();
+			if (acc.getId() > nextId)
+				nextId = acc.getId() + 1;
+		}
+		
+		// store the id, so we don't have to spin all the time
+		m_nextStoredID = nextId;
+		
+		return nextId;
+	}
 	
 }

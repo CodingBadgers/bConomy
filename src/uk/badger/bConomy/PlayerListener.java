@@ -20,7 +20,7 @@ public class PlayerListener implements Listener {
 		Account account = Global.getAccounts().get(player);
 		if (account == null) {
 			// new player, create an account
-			account = new Account(Global.getAccounts().size(), player);
+			account = new Account(Global.getNextId(), player);
 			Global.getAccounts().add(account);
 			DatabaseManager.addAccount(account);
 		}		
