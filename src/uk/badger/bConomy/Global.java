@@ -3,7 +3,6 @@ package uk.badger.bConomy;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
-import n3wton.me.BukkitDatabaseManager.Database.BukkitDatabase;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
@@ -18,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import uk.badger.bConomy.account.Account;
 import uk.badger.bConomy.account.PlayerAccounts;
 import uk.badger.bConomy.config.Config;
+import uk.thecodingbadgers.bDatabaseManager.Database.BukkitDatabase;
 
 /**
  * The Class Global.

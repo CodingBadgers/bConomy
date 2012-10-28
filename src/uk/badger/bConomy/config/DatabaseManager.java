@@ -8,9 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.badger.bConomy.Global;
 import uk.badger.bConomy.account.Account;
-
-import n3wton.me.BukkitDatabaseManager.BukkitDatabaseManager;
-import n3wton.me.BukkitDatabaseManager.BukkitDatabaseManager.DatabaseType;
+import uk.thecodingbadgers.bDatabaseManager.bDatabaseManager;
+import uk.thecodingbadgers.bDatabaseManager.bDatabaseManager.DatabaseType;
 
 public class DatabaseManager {
 	
@@ -24,7 +23,7 @@ public class DatabaseManager {
 	public static void setupDatabase(JavaPlugin plugin) {
 		
 		// creates the database instance
-		Global.m_database = BukkitDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), Config.m_dbInfo.driver, Config.m_dbInfo.update);
+		Global.m_database = bDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), Config.m_dbInfo.driver, Config.m_dbInfo.update);
 		
 		// login if sql 
 		if (Config.m_dbInfo.driver == DatabaseType.SQL) {
