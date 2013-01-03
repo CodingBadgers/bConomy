@@ -3,7 +3,6 @@ package uk.badger.bConomy.config;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.badger.bConomy.Global;
@@ -59,11 +58,10 @@ public class DatabaseManager {
 			while(result.next()) {
 				int id = result.getInt("id");
 				String name = result.getString("username");
-				OfflinePlayer player = plugin.getServer().getOfflinePlayer(name);
 				double balance = result.getDouble("balance");
 				
 				// create the account and then add it to the array
-				Account account = new Account(id, player, balance);
+				Account account = new Account(id, name, balance);
 				Global.addAccout(account);
 			}
 		} catch (SQLException e) {
@@ -87,12 +85,12 @@ public class DatabaseManager {
 		String query = 	"INSERT INTO " + Config.m_dbInfo.tablename + " " +
 						"(`id`, `username`, `balance`) VALUES (" +
 						"'" + account.getId() + "', " +
-						"'" + account.getPlayer().getName() + "', " +
+						"'" + account.getPlayerName() + "', " +
 						"'" + account.getBalance() + "');";
 				
 		Global.m_database.Query(query, true);
 		
-		Global.outputToConsole("Account " + account.getPlayer().getName() + " has been added to the database.");
+		Global.outputToConsole("Account " + account.getPlayerName() + " has been added to the database.");
 	}
 	
 	/**
@@ -132,7 +130,7 @@ public class DatabaseManager {
 		
 		Global.m_database.Query(query);
 		Global.getAccounts().remove(account);		
-		Global.outputToConsole("Removed the account " + account.getPlayer().getName());
+		Global.outputToConsole("Removed the account " + account.getPlayerName() +" [" + account.getId() + "]");
 	}
 	
 	/**

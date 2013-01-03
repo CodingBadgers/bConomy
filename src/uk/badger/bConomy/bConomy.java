@@ -161,7 +161,7 @@ public class bConomy extends JavaPlugin {
 		
 		for (int i = 0; i < topPlayers.size(); ++i) {
 			int id = topPlayers.size() - i - 1;
-			Global.output(sender, (i+1) + " - " + topPlayers.get(id).getPlayer().getName() + " - " + Global.format(topPlayers.get(id).getBalance()) );
+			Global.output(sender, (i+1) + " - " + topPlayers.get(id).getPlayerName() + " - " + Global.format(topPlayers.get(id).getBalance()) );
 		}
 		
 	}
@@ -192,7 +192,7 @@ public class bConomy extends JavaPlugin {
 		double amount = Config.m_startingBalance;
 		
 		playerAccount.setBalance(amount);
-		Global.output(sender, "You have reset '" + playerAccount.getPlayer().getName() + "s' balence");
+		Global.output(sender, "You have reset '" + playerAccount.getPlayerName() + "s' balence");
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class bConomy extends JavaPlugin {
 		}
 		
 		playerAccount.setBalance(amount);
-		Global.output(sender, "You have set " + playerAccount.getPlayer().getName() + "s balence to " + Global.format(amount));
+		Global.output(sender, "You have set " + playerAccount.getPlayerName() + "s balence to " + Global.format(amount));
 	}
 
 	/**
@@ -277,7 +277,7 @@ public class bConomy extends JavaPlugin {
 		}
 		
 		playerAccount.withdraw(amount);
-		Global.output(sender, "You have taken " + Global.format(amount) + " from "+ playerAccount.getPlayer().getName());
+		Global.output(sender, "You have taken " + Global.format(amount) + " from "+ playerAccount.getPlayerName());
 		
 	}
 	
@@ -318,8 +318,11 @@ public class bConomy extends JavaPlugin {
 		}
 		
 		playerAccount.deposit(amount);
-		Global.output(sender, "You have given " + playerAccount.getPlayer().getName() + " " + Global.format(amount));
-		Global.output(playerAccount.getPlayer(), "You have been granted " + Global.format(amount));
+		Global.output(sender, "You have given " + playerAccount.getPlayerName() + " " + Global.format(amount));
+		
+		if (playerAccount.isOnline()) {
+			Global.output(playerAccount.getPlayer(), "You have been granted " + Global.format(amount));
+		}
 		
 	}
 
@@ -376,8 +379,10 @@ public class bConomy extends JavaPlugin {
 		playerAccount.deposit(amount);
 		
 		Global.output(sender, "You have paid " + args[1] + " " + Global.format(amount));
-		Global.output(playerAccount.getPlayer(), "You have been paid " + Global.format(amount) + " by " + myAccount.getPlayer().getName());
 		
+		if (playerAccount.isOnline()) {
+			Global.output(playerAccount.getPlayer(), "You have been paid " + Global.format(amount) + " by " + myAccount.getPlayer().getName());
+		}
 	}
 
 	/**
@@ -414,7 +419,7 @@ public class bConomy extends JavaPlugin {
 			return;
 		}
 		
-		Global.output(sender, playerAccount.getPlayer().getName() + " has " + Global.format(playerAccount.getBalance()) );
+		Global.output(sender, playerAccount.getPlayerName() + " has " + Global.format(playerAccount.getBalance()) );
 	}
 
 	/**

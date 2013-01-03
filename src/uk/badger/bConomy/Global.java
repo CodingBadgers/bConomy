@@ -7,7 +7,6 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -136,10 +135,8 @@ public class Global {
 	 * @param player the player
 	 * @param message the message
 	 */
-	public static void output(OfflinePlayer player, String message) {
-		if (player.isOnline()) {
-			player.getPlayer().sendMessage(ChatColor.GOLD + "[bConomy] " + ChatColor.WHITE + message);
-		}
+	public static void output(Player player, String message) {
+		player.sendMessage(ChatColor.GOLD + "[bConomy] " + ChatColor.WHITE + message);
 	}
 	
 	/**
@@ -205,14 +202,14 @@ public class Global {
 			m_nextStoredID = m_nextStoredID + 1;
 			return m_nextStoredID;
 		}
-		
+
 		// work out the next ID by spinning through all the accounts
-		int nextId = 0;
+		int nextId = 1;
 		Iterator<Account> it = m_accounts.iterator();
-		
+
 		while (it.hasNext()) {
 			Account acc = it.next();
-			if (acc.getId() > nextId)
+			if (acc.getId() >= nextId)
 				nextId = acc.getId() + 1;
 		}
 		

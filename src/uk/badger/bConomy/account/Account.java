@@ -1,15 +1,15 @@
 package uk.badger.bConomy.account;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import uk.badger.bConomy.Global;
 import uk.badger.bConomy.config.Config;
 import uk.badger.bConomy.config.DatabaseManager;
 
 public class Account {
 	
 	private int m_id = 0;
-	private OfflinePlayer m_player = null;
+	private final String m_playerName;
 	private double m_balance = 0;
 
 	/**
@@ -18,9 +18,9 @@ public class Account {
 	 * @param id - the account id
 	 * @param player - the offline player to use
 	 */
-	public Account(int id, Player player){
+	public Account(int id, String playerName) {
 		m_id = id;
-		m_player = player;
+		m_playerName = playerName;
 		m_balance = Config.m_startingBalance;
 	}
 	
@@ -31,9 +31,9 @@ public class Account {
 	 * @param player - the offlineplayer instance
 	 * @param balance - their current balance
 	 */
-	public Account(int id, OfflinePlayer player, double balance) {
+	public Account(int id, String playerName, double balance) {
 		m_id = id;
-		m_player = player;
+		m_playerName = playerName;
 		m_balance = balance;
 	}
 	
@@ -47,12 +47,21 @@ public class Account {
 	}
 	
 	/**
+	 * Get the player name
+	 * 
+	 * @return the player name of this account
+	 */
+	public String getPlayerName() {
+		return m_playerName;
+	}
+	
+	/**
 	 * Get the player object
 	 * 
-	 * @return the offline player instance
+	 * @return the player instance
 	 */
-	public OfflinePlayer getPlayer() {
-		return m_player;
+	public Player getPlayer() {
+		return Global.getServer().getPlayer(m_playerName);
 	}
 	
 	/** 
@@ -61,16 +70,7 @@ public class Account {
 	 * @return if the account owner is online
 	 */
 	public boolean isOnline() {
-		return m_player.isOnline();
-	}
-
-	/**
-	 * Set the account owner
-	 * 
-	 * @param player
-	 */
-	public void setPlayer(Player player) {
-		m_player = player;
+		return Global.getServer().getPlayer(m_playerName) != null;
 	}
 
 	/**

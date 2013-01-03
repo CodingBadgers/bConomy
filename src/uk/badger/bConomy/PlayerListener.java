@@ -17,10 +17,10 @@ public class PlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		
 		Player player = event.getPlayer();
-		Account account = Global.getAccounts().get(player);
+		Account account = Global.getAccounts().get(player.getName());
 		if (account == null) {
 			// new player, create an account
-			account = new Account(Global.getNextId(), player);
+			account = new Account(Global.getNextId(), player.getName());
 			Global.getAccounts().add(account);
 			DatabaseManager.addAccount(account);
 		}		

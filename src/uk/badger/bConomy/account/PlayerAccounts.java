@@ -55,7 +55,7 @@ public class PlayerAccounts extends ArrayList<Account> {
 		Iterator<Account> itr = iterator();
 		while (itr.hasNext()) {
 			Account currentAccount = itr.next();
-			if (currentAccount.getPlayer().getName().equalsIgnoreCase(player.getName())) {
+			if (currentAccount.getPlayerName().equalsIgnoreCase(player.getName())) {
 				return currentAccount;
 			}
 		}
@@ -74,7 +74,7 @@ public class PlayerAccounts extends ArrayList<Account> {
 		Iterator<Account> itr = iterator();
 		while (itr.hasNext()) {
 			Account currentAccount = itr.next();
-			if (currentAccount.getPlayer().getName().equalsIgnoreCase(player)) {
+			if (currentAccount.getPlayerName().equalsIgnoreCase(player)) {
 				return currentAccount;
 			}
 		}
