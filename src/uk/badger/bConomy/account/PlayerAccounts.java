@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 @SuppressWarnings("serial")
@@ -50,7 +51,7 @@ public class PlayerAccounts extends ArrayList<Account> {
 	 * @param player the player
 	 * @return the account of the given player
 	 */
-	public Account get(Player player) {
+	public Account get(OfflinePlayer player) {
 
 		Iterator<Account> itr = iterator();
 		while (itr.hasNext()) {

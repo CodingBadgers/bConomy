@@ -126,9 +126,9 @@ public class DatabaseManager {
 		if (account == null)
 			return;
 		
-		String query = "DELETE FROM " + Config.m_dbInfo.tablename + " WHERE 'id'=" + account.getId() + ";";
+		String query = "DELETE FROM `" + Config.m_dbInfo.tablename + "` WHERE `id` = " + account.getId() + ";";
 		
-		Global.m_database.Query(query);
+		Global.m_database.Query(query, true);
 		Global.getAccounts().remove(account);		
 		Global.outputToConsole("Removed the account " + account.getPlayerName() +" [" + account.getId() + "]");
 	}
