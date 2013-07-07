@@ -92,8 +92,14 @@ public class bConomy extends JavaPlugin {
 				handleGrantAll(sender, args);
 				return true;
 			}
+			
+			// handle /money history
+			if (args.length != 0 && args[0].equalsIgnoreCase("history")) {
+				handleTransactions(sender, args);
+				return true;
+			}
 
-			// handle /money last
+			// handle /money
 			if (args.length <= 1) {
 				handleMoney(sender, args);
 				return true;
@@ -103,6 +109,30 @@ public class bConomy extends JavaPlugin {
 		}
 		
 		return false;
+	}
+	
+	private void handleTransactions(CommandSender sender, String[] args) {
+		
+		final boolean isAdmin = Global.hasPermission(sender, "bconomy.admin.history", false);
+		
+		String playerName = ((Player)sender).getName();
+		if (isAdmin && args.length >= 2) {
+			playerName = args[1];
+		}
+		
+		ArrayList<String> transactions = DatabaseManager.getTransactions(playerName);
+		
+		if (transactions.isEmpty()) {
+			Global.output(sender, playerName + " has no transaction histroy.");
+			return;
+		}
+		
+		Global.output(sender, playerName + "'s transaction histroy...");
+		
+		for (String transaction : transactions) {
+			Global.output(sender, transaction);
+		}
+		
 	}
 	
 	private void handleGrantAll(CommandSender sender, String[] args) {
@@ -130,6 +160,9 @@ public class bConomy extends JavaPlugin {
 		
 		for (Account account : Global.getAccounts()) {
 			account.deposit(amount);
+			
+			// Log the payment
+			DatabaseManager.logPayment("Server", account.getPlayerName(), amount);
 		}
 		
 		Global.output(sender, "Given " + Global.format(amount) + " to all accounts registered.");
@@ -320,6 +353,9 @@ public class bConomy extends JavaPlugin {
 		playerAccount.deposit(amount);
 		Global.output(sender, "You have given " + playerAccount.getPlayerName() + " " + Global.format(amount));
 		
+		// Log the payment
+		DatabaseManager.logPayment("Server", playerAccount.getPlayerName(), amount);
+		
 		if (playerAccount.isOnline()) {
 			Global.output(playerAccount.getPlayer(), "You have been granted " + Global.format(amount));
 		}
@@ -375,8 +411,11 @@ public class bConomy extends JavaPlugin {
 			return;
 		}
 		
-		myAccount.withdraw(amount);
+		myAccount.withdraw(amount);		
 		playerAccount.deposit(amount);
+		
+		// Log the payment
+		DatabaseManager.logPayment(((Player)sender).getName(), args[1], amount);
 		
 		Global.output(sender, "You have paid " + args[1] + " " + Global.format(amount));
 		
@@ -434,6 +473,12 @@ public class bConomy extends JavaPlugin {
 		sender.sendMessage("/money [name] - Displays the amount of money in an account");
 		sender.sendMessage("/money pay <name> <amount> - Pays a player");
 		sender.sendMessage("/money top [amount] - Shows the top player balances");
+		
+		if (Global.hasPermission(sender, "bconomy.admin.history", false)) {
+			sender.sendMessage("/money history [name] - Displays all payment transactions");
+		} else {
+			sender.sendMessage("/money history - Displays all payment transactions");
+		}
 		
 		if (Global.hasPermission(sender, "bconomy.admin.grant", false)) {
 			sender.sendMessage("/money grant <name> <amount> - Grants a player money");

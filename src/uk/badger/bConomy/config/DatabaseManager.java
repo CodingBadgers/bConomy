@@ -2,6 +2,9 @@ package uk.badger.bConomy.config;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,6 +16,8 @@ import uk.thecodingbadgers.bDatabaseManager.bDatabaseManager.DatabaseType;
 public class DatabaseManager {
 	
 	private static boolean working = true;
+	
+	private static String transactions = "bConomy_Transactions";
 	
 	/** 
 	 * Sets up the database and loads in all the infomation in the table
@@ -28,7 +33,7 @@ public class DatabaseManager {
 		if (Config.m_dbInfo.driver == DatabaseType.SQL) {
 			// logs in using values from the config
 			if (!Global.m_database.login(Config.m_dbInfo.host, Config.m_dbInfo.user, Config.m_dbInfo.password, Config.m_dbInfo.port)) {
-				working = true;
+				working = false;
 				return;
 			}
 		}
@@ -42,6 +47,22 @@ public class DatabaseManager {
 							"id INT," +
 							"username VARCHAR(64)," +
 							"balance DOUBLE" +
+							");";
+			
+			Global.m_database.Query(query, true);
+		}
+		
+		// Create the tansactions table
+		if (!Global.m_database.TableExists(transactions)) {
+			
+			Global.outputToConsole("Could not find 'transactions' table, creating default now.");
+			
+			// creates the accounts table
+			String query = "CREATE TABLE `" + transactions + "` (" +
+							"`from` VARCHAR(64)," +
+							"`to` VARCHAR(64)," +
+							"`amount` DOUBLE," +
+							"`when` DOUBLE" +
 							");";
 			
 			Global.m_database.Query(query, true);
@@ -145,5 +166,62 @@ public class DatabaseManager {
 			return null;
 		
 		return Global.m_database.QueryResult(query);
+	}
+
+	/**
+	 * Log a payment 
+	 * 
+	 * @param from Who is paying the money
+	 * @param to Who is receiving the money
+	 * @param amount The amount of money
+	 */
+	public static void logPayment(String from, String to, double amount) {
+		
+		if (!working)
+			return;
+		
+		Long time = System.currentTimeMillis();
+		
+		String query = "INSERT INTO " + transactions + " " +
+				"(`from`, `to`, `amount`, `when`) VALUES (" +
+				"'" + from + "', " +
+				"'" + to + "', " +
+				"'" + amount + "', " +
+				"'" + time + "');";
+		
+		Global.m_database.Query(query);
+	}
+
+	public static ArrayList<String> getTransactions(String playerName) {
+		
+		ArrayList<String> playerTransactions = new ArrayList<String>();
+		
+		String query = "SELECT * FROM " + transactions +
+				" WHERE `from` = " + playerName + " OR `to` = " + playerName + 
+				" ORDER BY `when` DESC";
+		
+		ResultSet result = Global.m_database.QueryResult(query);
+		if (result != null) {
+		
+			try {
+				while(result.next()) {
+					String from = result.getString("from");
+					String to = result.getString("to");
+					double amount = result.getDouble("amount");
+					double time = result.getDouble("time");
+					
+					SimpleDateFormat format = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+			        String dateString = format.format(new Date((long)time));
+					
+					String action = "[" + dateString + "] " + from + " paid " + to + " " + amount;
+					playerTransactions.add(action);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}		
+		
+		return playerTransactions;
 	}
 }
