@@ -127,10 +127,11 @@ public class bConomy extends JavaPlugin {
 			return;
 		}
 		
-		Global.output(sender, playerName + "'s transaction histroy...");
+		Global.output(sender, playerName + "'s transaction history...");
 		
-		for (String transaction : transactions) {
-			Global.output(sender, transaction);
+		final int noofTransactions = transactions.size();
+		for (int transactionIndex = noofTransactions - 1; transactionIndex >= 0; transactionIndex--) {
+			Global.output(sender, transactions.get(transactionIndex));
 		}
 		
 	}

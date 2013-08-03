@@ -27,7 +27,7 @@ public class DatabaseManager {
 	public static void setupDatabase(JavaPlugin plugin) {
 		
 		// creates the database instance
-		Global.m_database = bDatabaseManager.CreateDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), Config.m_dbInfo.driver, Config.m_dbInfo.update);
+		Global.m_database = bDatabaseManager.createDatabase(Config.m_dbInfo.dbname, Global.getPlugin(), Config.m_dbInfo.driver, Config.m_dbInfo.update);
 		
 		// login if sql 
 		if (Config.m_dbInfo.driver == DatabaseType.SQL) {
@@ -38,7 +38,7 @@ public class DatabaseManager {
 			}
 		}
 		
-		if (!Global.m_database.TableExists(Config.m_dbInfo.tablename)) {
+		if (!Global.m_database.tableExists(Config.m_dbInfo.tablename)) {
 			
 			Global.outputToConsole("Could not find 'accounts' table, creating default now.");
 			
@@ -49,11 +49,11 @@ public class DatabaseManager {
 							"balance DOUBLE" +
 							");";
 			
-			Global.m_database.Query(query, true);
+			Global.m_database.query(query, true);
 		}
 		
 		// Create the tansactions table
-		if (!Global.m_database.TableExists(transactions)) {
+		if (!Global.m_database.tableExists(transactions)) {
 			
 			Global.outputToConsole("Could not find 'transactions' table, creating default now.");
 			
@@ -65,11 +65,11 @@ public class DatabaseManager {
 							"`when` DOUBLE" +
 							");";
 			
-			Global.m_database.Query(query, true);
+			Global.m_database.query(query, true);
 		}
 		
 		String query = "SELECT * FROM " + Config.m_dbInfo.tablename;
-		ResultSet result = Global.m_database.QueryResult(query);
+		ResultSet result = Global.m_database.queryResult(query);
 		
 		if (result == null)
 			return;
@@ -109,7 +109,7 @@ public class DatabaseManager {
 						"'" + account.getPlayerName() + "', " +
 						"'" + account.getBalance() + "');";
 				
-		Global.m_database.Query(query, true);
+		Global.m_database.query(query, true);
 		
 		Global.outputToConsole("Account " + account.getPlayerName() + " has been added to the database.");
 	}
@@ -131,7 +131,7 @@ public class DatabaseManager {
 				 " SET balance='" + account.getBalance() + "' " +
 				 "WHERE id='" + account.getId() + "';";
 		
-		Global.m_database.Query(query);
+		Global.m_database.query(query);
  	}
 	
 	/**
@@ -149,7 +149,7 @@ public class DatabaseManager {
 		
 		String query = "DELETE FROM `" + Config.m_dbInfo.tablename + "` WHERE `id` = " + account.getId() + ";";
 		
-		Global.m_database.Query(query, true);
+		Global.m_database.query(query, true);
 		Global.getAccounts().remove(account);		
 		Global.outputToConsole("Removed the account " + account.getPlayerName() +" [" + account.getId() + "]");
 	}
@@ -165,7 +165,7 @@ public class DatabaseManager {
 		if (!working)
 			return null;
 		
-		return Global.m_database.QueryResult(query);
+		return Global.m_database.queryResult(query);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class DatabaseManager {
 				"'" + amount + "', " +
 				"'" + time + "');";
 		
-		Global.m_database.Query(query);
+		Global.m_database.query(query);
 	}
 
 	public static ArrayList<String> getTransactions(String playerName) {
@@ -197,10 +197,10 @@ public class DatabaseManager {
 		ArrayList<String> playerTransactions = new ArrayList<String>();
 		
 		String query = "SELECT * FROM " + transactions +
-				" WHERE `from` = " + playerName + " OR `to` = " + playerName + 
-				" ORDER BY `when` DESC";
+				" WHERE `from` = '" + playerName + "' OR `to` = '" + playerName + 
+				"' ORDER BY `when` DESC LIMIT 10";
 		
-		ResultSet result = Global.m_database.QueryResult(query);
+		ResultSet result = Global.m_database.queryResult(query);
 		if (result != null) {
 		
 			try {
@@ -208,12 +208,12 @@ public class DatabaseManager {
 					String from = result.getString("from");
 					String to = result.getString("to");
 					double amount = result.getDouble("amount");
-					double time = result.getDouble("time");
+					double time = result.getDouble("when");
 					
-					SimpleDateFormat format = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+					SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy HH:mm");
 			        String dateString = format.format(new Date((long)time));
 					
-					String action = "[" + dateString + "] " + from + " paid " + to + " " + amount;
+					String action = "[" + dateString + "] " + from + " paid " + to + " " + Global.format(amount);
 					playerTransactions.add(action);
 				}
 			} catch (SQLException e) {

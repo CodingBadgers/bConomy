@@ -45,7 +45,7 @@ public class Config {
 			
 			// currency info config
 			config.addDefault("currency.name", "pounds");
-			config.addDefault("currency.symbol", "£");
+			config.addDefault("currency.symbol", (char)156); // Ascii code for Â£
 			config.addDefault("currency.format", "@##0.00");
 			
 			// economy config
@@ -66,11 +66,11 @@ public class Config {
 		m_dbInfo.password = config.getString("database.password", "");
 		m_dbInfo.port = config.getInt("database.port", 3306);
 		m_dbInfo.update = config.getInt("database.updateTime", 2);
-		
+	
 		m_currency = new Currency();
 		m_currency.name = config.getString("currency.name", "pounds");
-		m_currency.symbol = config.getString("currency.symbol", "£").toCharArray()[0];
-		m_currency.format = config.getString("currency.fomat", "@#,##0.00").replace('@', m_currency.symbol);
+		m_currency.symbol = config.getString("currency.symbol", String.valueOf((char)156)).toCharArray()[0];
+		m_currency.format = config.getString("currency.fomat", "Â£#,##0.00").replace('@', m_currency.symbol);
 		
 		m_startingBalance = config.getInt("economy.startingBalance", 30);
 		
