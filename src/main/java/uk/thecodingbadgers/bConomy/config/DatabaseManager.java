@@ -225,7 +225,7 @@ public class DatabaseManager {
 
 	public static void getAccount(Account account) {
 		
-		String query = "SELECT * FROM " + Config.m_dbInfo.tablename + " WHERE 'username'=" + account.getPlayerName();
+		String query = "SELECT * FROM " + Config.m_dbInfo.tablename + " WHERE 'username'='" + account.getPlayerName() + "'";
 		ResultSet result = Global.m_database.queryResult(query);
 		
 		if (result == null)
