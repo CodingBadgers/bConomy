@@ -1,6 +1,6 @@
 name: bConomy
 authors: [N3wton, wman2]
-main: uk.badger.bConomy.bConomy
+main: uk.thecodingbadgers.bConomy.bConomy
 version: 1.0
 website: www.mcbadgercraft.com
 description: A simple econmy plugin for bukkit

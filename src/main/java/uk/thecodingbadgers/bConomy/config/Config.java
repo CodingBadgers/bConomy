@@ -1,8 +1,7 @@
-package uk.badger.bConomy.config;
+package uk.thecodingbadgers.bConomy.config;
 
 import org.bukkit.configuration.file.FileConfiguration;
-
-import uk.badger.bConomy.Global;
+import uk.thecodingbadgers.bConomy.Global;
 import uk.thecodingbadgers.bDatabaseManager.bDatabaseManager.DatabaseType;
 
 public class Config {

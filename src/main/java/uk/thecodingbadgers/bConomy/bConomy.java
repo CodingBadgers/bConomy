@@ -1,17 +1,15 @@
-package uk.badger.bConomy;
+package uk.thecodingbadgers.bConomy;
 
 import java.util.ArrayList;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import uk.badger.bConomy.account.Account;
-import uk.badger.bConomy.account.PlayerAccounts;
-import uk.badger.bConomy.config.Config;
-import uk.badger.bConomy.config.DatabaseManager;
+import uk.thecodingbadgers.bConomy.account.Account;
+import uk.thecodingbadgers.bConomy.account.PlayerAccounts;
+import uk.thecodingbadgers.bConomy.config.Config;
+import uk.thecodingbadgers.bConomy.config.DatabaseManager;
 
 public class bConomy extends JavaPlugin {
 	
@@ -225,6 +223,9 @@ public class bConomy extends JavaPlugin {
 		
 		double amount = Config.m_startingBalance;
 		
+		// Log the payment
+		DatabaseManager.logPayment("ServerReset", args[1], 0);
+		
 		playerAccount.setBalance(amount);
 		Global.output(sender, "You have reset '" + playerAccount.getPlayerName() + "s' balence");
 	}
@@ -264,6 +265,9 @@ public class bConomy extends JavaPlugin {
 			Global.output(sender, "You cannot set someone to a negative amount");
 			return;
 		}
+		
+		// Log the payment
+		DatabaseManager.logPayment("ServerSet", args[1], amount);
 		
 		playerAccount.setBalance(amount);
 		Global.output(sender, "You have set " + playerAccount.getPlayerName() + "s balence to " + Global.format(amount));
@@ -309,6 +313,9 @@ public class bConomy extends JavaPlugin {
 			Global.output(sender, args[1] + " does not have that much money");
 			return;
 		}
+		
+		// Log the payment
+		DatabaseManager.logPayment("Server", args[1], -amount);
 		
 		playerAccount.withdraw(amount);
 		Global.output(sender, "You have taken " + Global.format(amount) + " from "+ playerAccount.getPlayerName());

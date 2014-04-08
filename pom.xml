@@ -3,7 +3,7 @@
 
     <groupId>uk.thecodingbadgers</groupId>
     <artifactId>bConomy</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <name>bConomy</name>
     <url>http://www.mcbadgercraft.com</url>
     <packaging>jar</packaging>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.6.1-R0.1-SNAPSHOT</version>
+            <version>1.7.5-R0.1-SNAPSHOT</version>
         </dependency>
 		<dependency>
             <groupId>uk.thecodingbadgers</groupId>
@@ -47,17 +47,16 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>src/</sourceDirectory>
         <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <directory>${basedir}/src/main/resources/</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>plugin.yml</include>
-                </includes>
-            </resource>
-        </resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>*.yml</include>
+				</includes>
+			</resource>
+		</resources>
         
         <plugins>
             <plugin>

@@ -1,15 +1,13 @@
-package uk.badger.bConomy.config;
+package uk.thecodingbadgers.bConomy.config;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import org.bukkit.plugin.java.JavaPlugin;
-
-import uk.badger.bConomy.Global;
-import uk.badger.bConomy.account.Account;
+import uk.thecodingbadgers.bConomy.Global;
+import uk.thecodingbadgers.bConomy.account.Account;
 import uk.thecodingbadgers.bDatabaseManager.bDatabaseManager;
 import uk.thecodingbadgers.bDatabaseManager.bDatabaseManager.DatabaseType;
 

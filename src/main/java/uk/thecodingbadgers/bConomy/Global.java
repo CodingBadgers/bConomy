@@ -1,10 +1,8 @@
-package uk.badger.bConomy;
+package uk.thecodingbadgers.bConomy;
 
 import java.text.DecimalFormat;
 import java.util.Iterator;
-
 import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -12,10 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import uk.badger.bConomy.account.Account;
-import uk.badger.bConomy.account.PlayerAccounts;
-import uk.badger.bConomy.config.Config;
+import uk.thecodingbadgers.bConomy.account.Account;
+import uk.thecodingbadgers.bConomy.account.PlayerAccounts;
+import uk.thecodingbadgers.bConomy.config.Config;
 import uk.thecodingbadgers.bDatabaseManager.Database.BukkitDatabase;
 
 /**

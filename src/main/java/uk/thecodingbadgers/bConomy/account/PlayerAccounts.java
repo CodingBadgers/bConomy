@@ -1,10 +1,9 @@
-package uk.badger.bConomy.account;
+package uk.thecodingbadgers.bConomy.account;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 

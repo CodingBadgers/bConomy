@@ -1,4 +1,4 @@
-package uk.badger.bConomy;
+package uk.thecodingbadgers.bConomy;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,10 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import uk.badger.bConomy.account.Account;
-import uk.badger.bConomy.config.Config;
-import uk.badger.bConomy.config.DatabaseManager;
+import uk.thecodingbadgers.bConomy.account.Account;
+import uk.thecodingbadgers.bConomy.config.Config;
+import uk.thecodingbadgers.bConomy.config.DatabaseManager;
 
 public class PlayerListener implements Listener {
 

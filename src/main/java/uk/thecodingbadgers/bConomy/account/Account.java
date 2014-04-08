@@ -1,10 +1,9 @@
-package uk.badger.bConomy.account;
+package uk.thecodingbadgers.bConomy.account;
 
 import org.bukkit.entity.Player;
-
-import uk.badger.bConomy.Global;
-import uk.badger.bConomy.config.Config;
-import uk.badger.bConomy.config.DatabaseManager;
+import uk.thecodingbadgers.bConomy.Global;
+import uk.thecodingbadgers.bConomy.config.Config;
+import uk.thecodingbadgers.bConomy.config.DatabaseManager;
 
 public class Account {
 	
