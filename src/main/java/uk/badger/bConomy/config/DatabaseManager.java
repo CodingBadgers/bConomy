@@ -224,4 +224,26 @@ public class DatabaseManager {
 		
 		return playerTransactions;
 	}
+
+	public static void getAccount(Account account) {
+		
+		String query = "SELECT * FROM " + Config.m_dbInfo.tablename + " WHERE 'username'=" + account.getPlayerName();
+		ResultSet result = Global.m_database.queryResult(query);
+		
+		if (result == null)
+			return;
+		
+		// load in the accounts
+		try {
+			while(result.next()) {
+				double balance = result.getDouble("balance");
+				
+				// create the account and then add it to the array
+				account.setBalance(balance);	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

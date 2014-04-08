@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import uk.badger.bConomy.account.Account;
@@ -24,6 +25,9 @@ public class PlayerListener implements Listener {
 			Global.getAccounts().add(account);
 			DatabaseManager.addAccount(account);
 		}		
+		else {
+			DatabaseManager.getAccount(account);
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -41,7 +45,23 @@ public class PlayerListener implements Listener {
 		}
 		
 		DatabaseManager.updateAccount(account);
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerKick(PlayerKickEvent event) {
 		
+		Player player = event.getPlayer();
+		Account account = Global.getAccounts().get(player);
+		if (account == null)
+			return;
+		
+		if (account.getBalance() == Config.m_startingBalance) {
+			// default balance so delete them from the database
+			DatabaseManager.removeAccount(account);	
+			return;
+		}
+		
+		DatabaseManager.updateAccount(account);
 	}
 	
 }
