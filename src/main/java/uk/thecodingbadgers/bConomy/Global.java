@@ -2,14 +2,14 @@ package uk.thecodingbadgers.bConomy;
 
 import java.text.DecimalFormat;
 import java.util.Iterator;
-import net.milkbowl.vault.permission.Permission;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import uk.thecodingbadgers.bConomy.account.Account;
 import uk.thecodingbadgers.bConomy.account.PlayerAccounts;
 import uk.thecodingbadgers.bConomy.config.Config;
@@ -28,9 +28,6 @@ public class Global {
 	
 	/** The m_database. */
 	public static BukkitDatabase m_database = null;
-	
-	/** The permission. */
-	private static Permission m_permission = null;
 	
 	/** The next stored ID */
 	private static int m_nextStoredID = 0;
@@ -165,8 +162,8 @@ public class Global {
 		if (player.isOp() == true)
 			return true;
 		
-		// use vault to check perms
-		if (m_permission.has(sender, perm)){
+		// use bukkit to check perms
+		if (player.hasPermission(perm)){
 			return true;
 		}
 		
@@ -177,20 +174,6 @@ public class Global {
 		
 		return false;		
 	}	
-	
-	/**
-	 * setup the vault permissions
-	 * 
-	 * @return whether it was successful
-	 */
-	public static boolean setupPermissions() {
-		if (getServer().getPluginManager().getPlugin("Vault") == null)
-			return false;
-		
-        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        m_permission = rsp.getProvider();
-        return m_permission != null;
-    }
 
 	public static int getNextId() {
 		

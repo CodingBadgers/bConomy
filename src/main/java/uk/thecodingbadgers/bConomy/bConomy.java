@@ -26,10 +26,6 @@ public class bConomy extends JavaPlugin {
 		Global.outputToConsole("Initialising bConomy");
 		Global.getServer().getPluginManager().registerEvents(m_playerListener, this);
 
-		if (Global.setupPermissions()) {
-			Global.outputToConsole("Vault found, setup permissions through it");
-		}
-		
 		// setup config and database
 		Config.setupConfig();
 		DatabaseManager.setupDatabase(this);
