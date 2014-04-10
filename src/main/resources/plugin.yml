@@ -4,7 +4,7 @@ main: uk.thecodingbadgers.bConomy.bConomy
 version: 1.0
 website: www.mcbadgercraft.com
 description: A simple econmy plugin for bukkit
-softdepend: [Vault]
+loadbefore: [Vault]
 depend: [bDatabaseManager]
 
 commands:
