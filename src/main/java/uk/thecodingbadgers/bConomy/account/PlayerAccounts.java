@@ -2,8 +2,9 @@ package uk.thecodingbadgers.bConomy.account;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
+import java.util.UUID;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -43,6 +44,23 @@ public class PlayerAccounts extends ArrayList<Account> {
 
 		return false;
 	}
+
+	/**
+	 * Removes the account for a given player name.
+	 *
+	 * @param player the players name who's account should be removed
+	 * @return true, if successfully removed
+	 */
+	public boolean remove(OfflinePlayer player) {
+
+		Account account = get(player);
+		if (account != null) {
+			remove(account);
+			return true;
+		}
+
+		return false;
+	}
 	
 	/**
 	 * Gets an account from a given player.
@@ -55,7 +73,7 @@ public class PlayerAccounts extends ArrayList<Account> {
 		Iterator<Account> itr = iterator();
 		while (itr.hasNext()) {
 			Account currentAccount = itr.next();
-			if (currentAccount.getPlayerName().equalsIgnoreCase(player.getName())) {
+			if (currentAccount.getUniqueId().equals(player.getUniqueId())) {
 				return currentAccount;
 			}
 		}
@@ -82,16 +100,31 @@ public class PlayerAccounts extends ArrayList<Account> {
 		return null;
 	}
 	
+	/***
+	 * Gets an account from its underlying mojang uuid.
+	 * 
+	 * @param id - the players uuid
+	 * @return the account for the given uuid
+	 */
+	public Account get(UUID id) {
+
+		Iterator<Account> itr = iterator();
+		while (itr.hasNext()) {
+			Account currentAccount = itr.next();
+			if (currentAccount.getUniqueId().equals(id)) {
+				return currentAccount;
+			}
+		}
+
+		return null;
+	}
+	
 	public ArrayList<Account> getTop(int amount) {
 		
 		ArrayList<Account> sortedAccounts = this;
 		ArrayList<Account> topAccounts = new ArrayList<Account>();
 		
-		Collections.sort(sortedAccounts, new Comparator<Account>() {
-            public int compare(Account account, Account otherAccount) {
-                return (int)(account.getBalance() - otherAccount.getBalance());
-            }
-        });
+		Collections.sort(sortedAccounts);
 		
 		int start = sortedAccounts.size() - amount;
 		if (start < 0)

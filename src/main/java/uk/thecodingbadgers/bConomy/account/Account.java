@@ -1,14 +1,17 @@
 package uk.thecodingbadgers.bConomy.account;
 
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 import uk.thecodingbadgers.bConomy.Global;
 import uk.thecodingbadgers.bConomy.config.Config;
 import uk.thecodingbadgers.bConomy.config.DatabaseManager;
 
-public class Account {
+public class Account implements Comparable<Account> {
 	
 	private int m_id = 0;
-	private final String m_playerName;
+	private String m_playerName;
+	private final UUID m_uuid;
 	private double m_balance = 0;
 
 	/**
@@ -16,11 +19,10 @@ public class Account {
 	 * 
 	 * @param id - the account id
 	 * @param player - the offline player to use
+	 * @param uuid - the player's uuid
 	 */
-	public Account(int id, String playerName) {
-		m_id = id;
-		m_playerName = playerName;
-		m_balance = Config.m_startingBalance;
+	public Account(int id, String playerName, UUID uuid) {
+		this(id, playerName, uuid, Config.m_startingBalance);
 	}
 	
 	/**
@@ -28,10 +30,12 @@ public class Account {
 	 * 
 	 * @param id - the account id
 	 * @param player - the offlineplayer instance
+	 * @param uuid - the player's uuid
 	 * @param balance - their current balance
 	 */
-	public Account(int id, String playerName, double balance) {
+	public Account(int id, String playerName, UUID uuid, double balance) {
 		m_id = id;
+		m_uuid = uuid;
 		m_playerName = playerName;
 		m_balance = balance;
 	}
@@ -46,6 +50,15 @@ public class Account {
 	}
 	
 	/**
+	 * Update this accounts associated player name.
+	 * 
+	 * @param name the new player name
+	 */
+	public void setPlayerName(String name) {
+		this.m_playerName = name;
+	}
+	
+	/**
 	 * Get the player name
 	 * 
 	 * @return the player name of this account
@@ -55,12 +68,21 @@ public class Account {
 	}
 	
 	/**
+	 * Gets the players mojang id.
+	 * 
+	 * @return the players mojang id.
+	 */
+	public UUID getUniqueId() {
+		return m_uuid;
+	}
+	
+	/**
 	 * Get the player object
 	 * 
 	 * @return the player instance
 	 */
 	public Player getPlayer() {
-		return Global.getServer().getPlayer(m_playerName);
+		return Global.getServer().getPlayer(m_uuid);
 	}
 	
 	/** 
@@ -69,7 +91,7 @@ public class Account {
 	 * @return if the account owner is online
 	 */
 	public boolean isOnline() {
-		return Global.getServer().getPlayer(m_playerName) != null;
+		return getPlayer() != null;
 	}
 
 	/**
@@ -119,6 +141,17 @@ public class Account {
 	 */
 	public boolean has(double amount) {
 		return amount <= m_balance;
+	}
+
+	/**
+	 * Compare this account to another account, will return which has the
+	 * greator balance
+	 * 
+	 * @param o the other account
+	 * @return 
+	 */
+	public int compareTo(Account o) {
+		return (int) Math.signum(getBalance() - o.getBalance());
 	}
 
 }
