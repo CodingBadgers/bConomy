@@ -18,8 +18,6 @@ public class Config {
 	}
 	
 	public static class Currency {
-		public String name;
-		public char symbol;
 		public String format;
 	}
 	
@@ -43,8 +41,6 @@ public class Config {
 			config.addDefault("database.updateTime", 2);
 			
 			// currency info config
-			config.addDefault("currency.name", "pounds");
-			config.addDefault("currency.symbol", (char)156); // Ascii code for £
 			config.addDefault("currency.format", "@##0.00");
 			
 			// economy config
@@ -67,9 +63,7 @@ public class Config {
 		m_dbInfo.update = config.getInt("database.updateTime", 2);
 	
 		m_currency = new Currency();
-		m_currency.name = config.getString("currency.name", "pounds");
-		m_currency.symbol = config.getString("currency.symbol", String.valueOf((char)156)).toCharArray()[0];
-		m_currency.format = config.getString("currency.fomat", "£#,##0.00").replace('@', m_currency.symbol);
+		m_currency.format = "0 Crumbs"; // config.getString("currency.fomat", "£#,##0.00");
 		
 		m_startingBalance = config.getInt("economy.startingBalance", 30);
 		
