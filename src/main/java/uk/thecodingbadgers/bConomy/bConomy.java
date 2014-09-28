@@ -1,15 +1,22 @@
 package uk.thecodingbadgers.bConomy;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import uk.thecodingbadgers.bConomy.account.Account;
 import uk.thecodingbadgers.bConomy.account.PlayerAccounts;
 import uk.thecodingbadgers.bConomy.config.Config;
 import uk.thecodingbadgers.bConomy.config.DatabaseManager;
+import uk.thecodingbadgers.bConomy.vault.VaultHandler;
 
 public class bConomy extends JavaPlugin {
 	
@@ -29,11 +36,23 @@ public class bConomy extends JavaPlugin {
 		// setup config and database
 		Config.setupConfig();
 		DatabaseManager.setupDatabase(this);
+
+        setupVaultHandler();
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.bukkit.plugin.java.JavaPlugin#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
-	 */
+
+    private void setupVaultHandler() {
+        try {
+            Economy econ = VaultHandler.class.getConstructor(Plugin.class).newInstance(this);
+            getServer().getServicesManager().register(Economy.class, econ, this, ServicePriority.Highest);
+            getLogger().info(String.format("[%s][Economy] %s found: %s", getDescription().getName(), "bConomy", econ.isEnabled() ? "Loaded" : "Waiting"));
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.bukkit.plugin.java.JavaPlugin#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+     */
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 
 		if (commandLabel.equalsIgnoreCase("money")) {

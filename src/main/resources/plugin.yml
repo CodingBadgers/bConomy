@@ -5,8 +5,7 @@ version: 1.0
 website: www.mcbadgercraft.com
 description: A simple econmy plugin for bukkit
 
-loadbefore: [Vault]
-depend: [bDatabaseManager]
+depend: [bDatabaseManager, Vault]
 load: startup
 
 commands:
