@@ -18,7 +18,8 @@ public class Config {
 	}
 	
 	public static class Currency {
-		public String format;
+		public String format;		
+                public String name;
 	}
 	
 	public static DatabaseInfo m_dbInfo = null;
@@ -41,8 +42,9 @@ public class Config {
 			config.addDefault("database.updateTime", 2);
 			
 			// currency info config
-			config.addDefault("currency.format", "@##0.00");
-			
+			config.addDefault("currency.name", "Pound");			
+                        config.addDefault("currency.format", "@##0.00");
+		
 			// economy config
 			config.addDefault("economy.startingBalance", 30);
 			
@@ -64,7 +66,8 @@ public class Config {
 	
 		m_currency = new Currency();
 		m_currency.format = "0 Crumbs"; // config.getString("currency.fomat", "£#,##0.00");
-		
+		m_currency.name = "Crumb"; // config.getString("currency.name", "Pound");
+                
 		m_startingBalance = config.getInt("economy.startingBalance", 30);
 		
 		Global.getPlugin().saveConfig();
