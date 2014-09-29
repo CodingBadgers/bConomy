@@ -74,10 +74,12 @@ public class VaultHandler implements Economy {
             ex.printStackTrace();
         }
     }
+
     @Override
     public int fractionalDigits() {
         return 2;
     }
+
     @Override
     public boolean hasAccount(String playerName, String worldName) {
         return hasAccount(playerName);
@@ -85,7 +87,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer, String s) {
-        return false;
+        return hasAccount(offlinePlayer.getName());
     }
 
     @Override
@@ -95,7 +97,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer, String s) {
-        return 0;
+        return getBalance(offlinePlayer.getName());
     }
 
     @Override
@@ -105,7 +107,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
-        return false;
+        return has(offlinePlayer.getName(), v);
     }
 
     @Override
@@ -115,7 +117,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double v) {
-        return null;
+        return withdrawPlayer(offlinePlayer.getName(), v);
     }
 
     @Override
@@ -125,7 +127,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
-        return null;
+        return depositPlayer(offlinePlayer.getName(), v);
     }
 
     @Override
@@ -135,7 +137,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer, String s) {
-        return false;
+        return createPlayerAccount(offlinePlayer.getName());
     }
 
     @Override
@@ -178,7 +180,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return false;
+        return hasAccount(offlinePlayer.getName());
     }
 
     @Override
@@ -192,7 +194,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return 0;
+        return getBalance(offlinePlayer.getName());
     }
 
     @Override
@@ -206,7 +208,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public boolean has(OfflinePlayer offlinePlayer, double v) {
-        return false;
+        return has(offlinePlayer.getName(), v);
     }
 
     @Override
@@ -225,7 +227,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        return null;
+        return withdrawPlayer(offlinePlayer.getName(), v);
     }
 
     @Override
@@ -240,7 +242,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        return null;
+        return depositPlayer(offlinePlayer.getName(), v);
     }
 
     @Override
@@ -250,7 +252,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public EconomyResponse createBank(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return new EconomyResponse(0, 0, ResponseType.NOT_IMPLEMENTED, getName() + " does not support Banks");
     }
 
     @Override
@@ -285,7 +287,7 @@ public class VaultHandler implements Economy {
 
     @Override
     public EconomyResponse isBankOwner(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return new EconomyResponse(0, 0, ResponseType.NOT_IMPLEMENTED, getName() + " does not support Banks.");
     }
 
     @Override
@@ -295,19 +297,20 @@ public class VaultHandler implements Economy {
 
     @Override
     public EconomyResponse isBankMember(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return new EconomyResponse(0, 0, ResponseType.NOT_IMPLEMENTED, getName() + " does not support Banks.");
     }
 
     @Override
     public List<String> getBanks() {
         throw new UnsupportedOperationException(getName() + " does not support listing of Banks");
     }
+
     @Override
     public boolean createPlayerAccount(String playerName) {
         if (hasAccount(playerName)) {
             return false;
         }
-        Account account = new Account(Global.getAccounts().size(), Global.getPlugin().getServer().getOfflinePlayer(playerName).getName(), UUID.randomUUID());
+        Account account = new Account(Global.getAccounts().size(), playerName, UUID.randomUUID());
         Global.addAccout(account);
         DatabaseManager.addAccount(account);
         return true;
@@ -315,6 +318,12 @@ public class VaultHandler implements Economy {
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
-        return false;
+        if (hasAccount(offlinePlayer.getName())) {
+            return false;
+        }
+        Account account = new Account(Global.getAccounts().size(), offlinePlayer.getName(), offlinePlayer.getUniqueId());
+        Global.addAccout(account);
+        DatabaseManager.addAccount(account);
+        return true;
     }
 }
